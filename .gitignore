@@ -1,0 +1,85 @@
+##########################################
+# Visual Studio 기본 무시 항목
+##########################################
+
+## 빌드 결과물
+*.obj
+*.pdb
+*.idb
+*.exp
+*.lib
+*.dll
+*.exe
+*.app
+*.iobj
+*.ipdb
+*.res
+*.log
+*.ilk
+
+## 중간 결과물 및 임시 파일
+*.tlog
+*.lastbuildstate
+*.sbr
+*.pch
+*.sdf
+*.opensdf
+*.VC.db
+*.dbmdl
+*.cache
+*.aps
+*.ncb
+*.opendb
+*.bak
+*.old
+
+## 사용자별 설정 (공유 불필요)
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+*.VC.VC.opendb
+*.vspx
+*.vsp
+*.vspscc
+
+##########################################
+# 폴더 무시
+##########################################
+
+## Visual Studio 관련
+.vs/
+
+## 빌드 출력 디렉토리
+Debug/
+Release/
+x64/
+x86/
+ipch/
+Build/
+Out/
+Bin/
+LOG/
+
+## Run 폴더
+Run/ 
+
+
+##########################################
+# 공유해야 할 설정 파일은 예외로 처리
+##########################################
+
+!*.sln
+!*.vcxproj
+!*.vcxproj.filters
+!*.props
+!*.targets
+
+##########################################
+# 백업 파일 무시
+##########################################
+
+*[bB]ackup*/
+*[bB]ackup*
+Run/Model

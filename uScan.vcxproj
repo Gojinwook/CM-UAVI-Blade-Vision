@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>MFCProj</Keyword>
+    <ProjectGuid>{CA0826BB-451C-994A-1AE8-E987A1980A60}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>.\Run\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>_CMI4000_VS_debug_v3046</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>.\Run\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>_CMI4000_VS_release_v3046</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>Include;Include/PClass;Include/Axt;Include/UGrid;C:\Program Files\MVTec\HALCON-12.0\include;C:\Program Files\MVTec\HALCON-12.0\include\cpp;$(MIL_Path)\..\Include\MilDyn;$(MIL_Path)\..\Include;C:\Program Files\Point Grey Research\FlyCapture2\include;C:\Program Files\CREVIS\Cameras\MCam40\include;C:\Program Files\CREVIS\Cameras\MCam40\include\TLI;Opencv3.1.0\build\include;Opencv3.1.0\build\include\opencv2;Opencv3.1.0\build\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WELDING;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\uScan.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\uScan.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\uScan.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>libcmt;libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalLibraryDirectories>Library;Library/PClass;Library/Axt;C:\Program Files\MVTec\HALCON-12.0\lib\x64-win64;$(MIL_Path)\..\LIB;C:\Program Files\Point Grey Research\FlyCapture2\lib64;C:\Program Files\CREVIS\Cameras\MCam40\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>pbc.lib;version.lib;TsaiLIb2.lib;IniFile.lib;mil.lib;milim.lib;MIInterface.lib;FlyCapture2.lib;FlyCapture2GUI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>if not exist "$(SolutionDir)deploy" mkdir "$(SolutionDir)deploy"
+copy "$(TargetPath)" "$(SolutionDir)deploy\"
+if exist "$(SolutionDir)Release.txt" copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <AdditionalIncludeDirectories>Include;Include/PClass;Include/Axt;Include/UGrid;C:\Program Files\MVTec\HALCON-12.0\include;C:\Program Files\MVTec\HALCON-12.0\include\cpp;C:\Program Files\Matrox Imaging\Mil\Include\MilDyn;C:\Program Files\Matrox Imaging\Mil\Include;C:\Program Files\Point Grey Research\FlyCapture2\include\;C:\Program Files\CREVIS\Cameras\MCam40\include;C:\Program Files\CREVIS\Cameras\MCam40\include\TLI;Opencv3.1.0\build\include;Opencv3.1.0\build\include\opencv2;Opencv3.1.0\build\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;WELDING;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Release\uScan.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\uScan.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\uScan.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>libcmtd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalLibraryDirectories>Library;Library/PClass;Library/Axt;C:\Program Files\MVTec\HALCON-12.0\lib\x64-win64;C:\Program Files\Matrox Imaging\Mil\LIB;C:\Program Files\Point Grey Research\FlyCapture2\lib64;C:\Program Files\CREVIS\Cameras\MCam40\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>halconcppxl.lib;pbc.lib;TransClientCoff.lib;version.lib;TsaiLIb2.lib;clserHor.lib;DllChartCoff.lib;MIInterface.lib;FlyCapture2.lib;FlyCapture2GUI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy Release.txt .\Run\
+if not exist "$(SolutionDir)deploy" mkdir "$(SolutionDir)deploy"
+copy "$(TargetPath)" "$(SolutionDir)deploy\"
+copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="ADJClientService.cpp" />
+    <ClCompile Include="AdminPasswordDlg.cpp" />
+    <ClCompile Include="AJinAXL.cpp" />
+    <ClCompile Include="Algorithm.cpp" />
+    <ClCompile Include="AlgorithmDlg.cpp" />
+    <ClCompile Include="AlgorithmParam.cpp" />
+    <ClCompile Include="AutoCalService.cpp" />
+    <ClCompile Include="AutoFocusDlg.cpp" />
+    <ClCompile Include="BarcodeDlg.cpp" />
+    <ClCompile Include="CalDataService.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="ModelLoadProgressDlg.cpp" />
+    <ClCompile Include="ComThread.cpp" />
+    <ClCompile Include="ConditionBottomBarrelDlg.cpp" />
+    <ClCompile Include="ConditionGridCtrl.cpp" />
+    <ClCompile Include="ConditionInnerBarrelDlg.cpp" />
+    <ClCompile Include="ConditionLensDlg.cpp" />
+    <ClCompile Include="ConditionTopBarrelDlg.cpp" />
+    <ClCompile Include="CrevisCam.cpp" />
+    <ClCompile Include="DefectListDlg.cpp" />
+    <ClCompile Include="DefectPriorityDlg.cpp" />
+    <ClCompile Include="Delegate.cpp" />
+    <ClCompile Include="DlgInspectFobTest.cpp" />
+    <ClCompile Include="EventStub.cpp" />
+    <ClCompile Include="FAISettingDlg.cpp" />
+    <ClCompile Include="FileBase.cpp" />
+    <ClCompile Include="TCPFileReceiver.cpp" />
+    <ClCompile Include="FobModeChangeDlg.cpp" />
+    <ClCompile Include="GFunction.cpp" />
+    <ClCompile Include="GTRegion.cpp" />
+    <ClCompile Include="GViewportManager.cpp" />
+    <ClCompile Include="HandlerService.cpp" />
+    <ClCompile Include="HWinPanel.cpp" />
+    <ClCompile Include="IniFileCS.cpp" />
+    <ClCompile Include="InspectAdminViewDlg.cpp" />
+    <ClCompile Include="InspectAdminViewHideDlg.cpp" />
+    <ClCompile Include="InspectionConditionTabDlg.cpp" />
+    <ClCompile Include="InspectionParameterExtraDlg.cpp" />
+    <ClCompile Include="InspectionTypeDlg.cpp" />
+    <ClCompile Include="InspectResultDlg.cpp" />
+    <ClCompile Include="InspectService.cpp" />
+    <ClCompile Include="InspectSummary.cpp" />
+    <ClCompile Include="InspectViewBarrelEdgeDlg.cpp" />
+    <ClCompile Include="InspectViewBarrelSurfaceDlg.cpp" />
+    <ClCompile Include="InspectViewExtra1Dlg.cpp" />
+    <ClCompile Include="InspectViewExtra2Dlg.cpp" />
+    <ClCompile Include="InspectViewLensInnerDlg.cpp" />
+    <ClCompile Include="InspectViewLensOuterDlg.cpp" />
+    <ClCompile Include="InspectViewOverayImageDlg.cpp" />
+    <ClCompile Include="JogButtonStatic.cpp" />
+    <ClCompile Include="JogSetDlg.cpp" />
+    <ClCompile Include="LightAutoCalResultDlg.cpp" />
+    <ClCompile Include="LightAverageValueDlg.cpp" />
+    <ClCompile Include="LightControl.cpp" />
+    <ClCompile Include="LightControlDlg.cpp" />
+    <ClCompile Include="LoadModelDlg.cpp" />
+    <ClCompile Include="ROIAnisoAlignDlg.cpp" />
+    <ClCompile Include="ROIEdgeMeasureDlg.cpp" />
+    <ClCompile Include="LogDlg.cpp" />
+    <ClCompile Include="ROICommonAlgorithmDlg.cpp" />
+    <ClCompile Include="ROIIDChangeDlg.cpp" />
+    <ClCompile Include="ROIPreprocessingDlg.cpp" />
+    <ClCompile Include="ROIAlgorithmTabDlg.cpp" />
+    <ClCompile Include="ROIPartCheckDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MatchingDlg.cpp" />
+    <ClCompile Include="MatchingLocalDlg.cpp" />
+    <ClCompile Include="MatchingParamAdvancedDlg.cpp" />
+    <ClCompile Include="ModelDataManager.cpp" />
+    <ClCompile Include="NewModelDlg.cpp" />
+    <ClCompile Include="Operator_RegisterDlg.cpp" />
+    <ClCompile Include="PointGrayCam.cpp" />
+    <ClCompile Include="PreferenceDlg.cpp" />
+    <ClCompile Include="ResultViewSelectDlg.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
+    <ClCompile Include="SelectPartRegion.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="StrobeData.cpp" />
+    <ClCompile Include="TabControlDlg.cpp" />
+    <ClCompile Include="TCPClient.cpp" />
+    <ClCompile Include="TCPServer.cpp" />
+    <ClCompile Include="TeachAlgorithmLinefitDlg.cpp" />
+    <ClCompile Include="TeachAlgorithmListCtrl.cpp" />
+    <ClCompile Include="TeachParamDlg.cpp" />
+    <ClCompile Include="TeachParamDlg_Tab.cpp" />
+    <ClCompile Include="TeachParamROIDlg_Tab.cpp" />
+    <ClCompile Include="ThresholdHistogramDlg.cpp" />
+    <ClCompile Include="ToolBarCombo.cpp" />
+    <ClCompile Include="TrayAdminViewDlg.cpp" />
+    <ClCompile Include="TrayBeamProjectViewDlg.cpp" />
+    <ClCompile Include="TrayImagePB.cpp" />
+    <ClCompile Include="TrayOperatorViewPrevDlg.cpp" />
+    <ClCompile Include="TrayOperatorViewNowDlg.cpp" />
+    <ClCompile Include="TriggerManager.cpp" />
+    <ClCompile Include="UdpSocketCS.cpp" />
+    <ClCompile Include="uScan.cpp" />
+    <ClCompile Include="uScanDoc.cpp" />
+    <ClCompile Include="uScanView.cpp" />
+    <ClCompile Include="Include\UGrid\UGCBType.cpp" />
+    <ClCompile Include="Include\UGrid\UGCell.cpp" />
+    <ClCompile Include="Include\UGrid\UGCelTyp.cpp" />
+    <ClCompile Include="Include\UGrid\UGCnrBtn.cpp" />
+    <ClCompile Include="Include\UGrid\UGCTarrw.cpp" />
+    <ClCompile Include="Include\UGrid\UGCtrl.cpp" />
+    <ClCompile Include="Include\UGrid\UGDLType.cpp" />
+    <ClCompile Include="Include\UGrid\UGDrgDrp.cpp" />
+    <ClCompile Include="Include\UGrid\UGDrwHnt.cpp" />
+    <ClCompile Include="Include\UGrid\UGDtaSrc.cpp" />
+    <ClCompile Include="Include\UGrid\UGEdit.cpp" />
+    <ClCompile Include="Include\UGrid\UGEditBase.cpp" />
+    <ClCompile Include="Include\UGrid\ugformat.cpp" />
+    <ClCompile Include="Include\UGrid\uggdinfo.cpp" />
+    <ClCompile Include="Include\UGrid\UGGrid.cpp" />
+    <ClCompile Include="Include\UGrid\UGHint.cpp" />
+    <ClCompile Include="Include\UGrid\ughscrol.cpp" />
+    <ClCompile Include="Include\UGrid\ugLstBox.cpp" />
+    <ClCompile Include="Include\UGrid\UGMEdit.cpp" />
+    <ClCompile Include="Include\UGrid\UGMemMan.cpp" />
+    <ClCompile Include="Include\UGrid\UGMultiS.cpp" />
+    <ClCompile Include="Include\UGrid\ugprint.cpp" />
+    <ClCompile Include="Include\UGrid\ugptrlst.cpp" />
+    <ClCompile Include="Include\UGrid\ugsidehd.cpp" />
+    <ClCompile Include="Include\UGrid\UGStrOp.cpp" />
+    <ClCompile Include="Include\UGrid\ugtab.cpp" />
+    <ClCompile Include="Include\UGrid\UGTopHdg.cpp" />
+    <ClCompile Include="Include\UGrid\ugvscrol.cpp" />
+    <ClCompile Include="Include\UGrid\UGXPThemes.cpp" />
+    <ClCompile Include="wcSliderButton.cpp" />
+    <ClCompile Include="wcSliderPopup.cpp" />
+    <ClCompile Include="zip.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="uScan.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="ADJClientService.h" />
+    <ClInclude Include="AdminPasswordDlg.h" />
+    <ClInclude Include="AJinAXL.h" />
+    <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="AlgorithmDlg.h" />
+    <ClInclude Include="AlgorithmParam.h" />
+    <ClInclude Include="AutoCalService.h" />
+    <ClInclude Include="AutoFocusDlg.h" />
+    <ClInclude Include="BarcodeDlg.h" />
+    <ClInclude Include="CalDataService.h" />
+    <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="ModelLoadProgressDlg.h" />
+    <ClInclude Include="ComThread.h" />
+    <ClInclude Include="ConditionBottomBarrelDlg.h" />
+    <ClInclude Include="ConditionGridCtrl.h" />
+    <ClInclude Include="ConditionInnerBarrelDlg.h" />
+    <ClInclude Include="ConditionLensDlg.h" />
+    <ClInclude Include="ConditionTopBarrelDlg.h" />
+    <ClInclude Include="ConfigBuildVersion.h" />
+    <ClInclude Include="CrevisCam.h" />
+    <ClInclude Include="DefectListDlg.h" />
+    <ClInclude Include="DefectPriorityDlg.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Delegate.h" />
+    <ClInclude Include="DlgInspectFobTest.h" />
+    <ClInclude Include="EventStub.h" />
+    <ClInclude Include="FAISettingDlg.h" />
+    <ClInclude Include="FileBase.h" />
+    <ClInclude Include="TCPFileReceiver.h" />
+    <ClInclude Include="FobModeChangeDlg.h" />
+    <ClInclude Include="GFunction.h" />
+    <ClInclude Include="GTRegion.h" />
+    <ClInclude Include="GViewportManager.h" />
+    <ClInclude Include="HandlerService.h" />
+    <ClInclude Include="HWinPanel.h" />
+    <ClInclude Include="IniFileCS.h" />
+    <ClInclude Include="InspectAdminViewDlg.h" />
+    <ClInclude Include="InspectAdminViewHideDlg.h" />
+    <ClInclude Include="InspectionConditionTabDlg.h" />
+    <ClInclude Include="InspectionParameterExtraDlg.h" />
+    <ClInclude Include="InspectionTypeDlg.h" />
+    <ClInclude Include="InspectResultDlg.h" />
+    <ClInclude Include="InspectService.h" />
+    <ClInclude Include="InspectSummary.h" />
+    <ClInclude Include="InspectViewBarrelEdgeDlg.h" />
+    <ClInclude Include="InspectViewBarrelSurfaceDlg.h" />
+    <ClInclude Include="InspectViewExtra1Dlg.h" />
+    <ClInclude Include="InspectViewExtra2Dlg.h" />
+    <ClInclude Include="InspectViewLensInnerDlg.h" />
+    <ClInclude Include="InspectViewLensOuterDlg.h" />
+    <ClInclude Include="InspectViewOverayImageDlg.h" />
+    <ClInclude Include="JogButtonStatic.h" />
+    <ClInclude Include="JogSetDlg.h" />
+    <ClInclude Include="LightAutoCalResultDlg.h" />
+    <ClInclude Include="LightAverageValueDlg.h" />
+    <ClInclude Include="LightControl.h" />
+    <ClInclude Include="LightControlDlg.h" />
+    <ClInclude Include="LoadModelDlg.h" />
+    <ClInclude Include="ROIAnisoAlignDlg.h" />
+    <ClInclude Include="ROICommonAlgorithmDlg.h" />
+    <ClInclude Include="ROIIDChangeDlg.h" />
+    <ClInclude Include="ROIPreprocessingDlg.h" />
+    <ClInclude Include="ROIAlgorithmTabDlg.h" />
+    <ClInclude Include="ROIEdgeMeasureDlg.h" />
+    <ClInclude Include="ROIPartCheckDlg.h" />
+    <ClInclude Include="LogDlg.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MatchingDlg.h" />
+    <ClInclude Include="MatchingLocalDlg.h" />
+    <ClInclude Include="MatchingParamAdvancedDlg.h" />
+    <ClInclude Include="MIInterface.h" />
+    <ClInclude Include="ModelDataManager.h" />
+    <ClInclude Include="NewModelDlg.h" />
+    <ClInclude Include="Operator_RegisterDlg.h" />
+    <ClInclude Include="PointGrayCam.h" />
+    <ClInclude Include="PreferenceDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResultViewSelectDlg.h" />
+    <ClInclude Include="SafeQueue.h" />
+    <ClInclude Include="SaveManager.h" />
+    <ClInclude Include="SelectPartRegion.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="StrobeData.h" />
+    <ClInclude Include="TabControlDlg.h" />
+    <ClInclude Include="TCPClient.h" />
+    <ClInclude Include="TCPDefine.h" />
+    <ClInclude Include="TCPServer.h" />
+    <ClInclude Include="TeachAlgorithmLinefitDlg.h" />
+    <ClInclude Include="TeachAlgorithmListCtrl.h" />
+    <ClInclude Include="TeachParamDlg.h" />
+    <ClInclude Include="TeachParamDlg_Tab.h" />
+    <ClInclude Include="TeachParamROIDlg_Tab.h" />
+    <ClInclude Include="ThreadManager.hpp" />
+    <ClInclude Include="ThresholdHistogramDlg.h" />
+    <ClInclude Include="ToolBarCombo.h" />
+    <ClInclude Include="TrayAdminViewDlg.h" />
+    <ClInclude Include="TrayBeamProjectViewDlg.h" />
+    <ClInclude Include="TrayImagePB.h" />
+    <ClInclude Include="TrayOperatorViewPrevDlg.h" />
+    <ClInclude Include="TrayOperatorViewNowDlg.h" />
+    <ClInclude Include="TriggerManager.h" />
+    <ClInclude Include="UdpSocketCS.h" />
+    <ClInclude Include="uScan.h" />
+    <ClInclude Include="uScanDoc.h" />
+    <ClInclude Include="uScanView.h" />
+    <ClInclude Include="wcSliderButton.h" />
+    <ClInclude Include="wcSliderPopup.h" />
+    <ClInclude Include="zip.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="res\Arrow.ico" />
+    <CustomBuild Include="res\board.ico" />
+    <CustomBuild Include="res\Create.cur" />
+    <CustomBuild Include="res\gerber_v.bmp" />
+    <CustomBuild Include="res\gerber_view_tb.bmp" />
+    <CustomBuild Include="res\Hand.CUR" />
+    <CustomBuild Include="res\HandGrab.CUR" />
+    <CustomBuild Include="res\icon_tre.ico" />
+    <CustomBuild Include="res\ImageDisplayToolbar.bmp" />
+    <CustomBuild Include="res\inspect_.bmp" />
+    <CustomBuild Include="res\InspectViewToolbar.bmp" />
+    <CustomBuild Include="res\Package.ico" />
+    <CustomBuild Include="res\review_tb.bmp" />
+    <CustomBuild Include="res\Root.ico" />
+    <CustomBuild Include="res\SelectPart.CUR" />
+    <CustomBuild Include="res\Splash.bmp" />
+    <CustomBuild Include="res\Splash3 copy.bmp" />
+    <CustomBuild Include="res\Splash3.bmp" />
+    <CustomBuild Include="res\Splash4000.bmp" />
+    <CustomBuild Include="res\Splash4000_Mold.bmp" />
+    <CustomBuild Include="res\Toolbar.bmp" />
+    <CustomBuild Include="res\TreeDefault.ico" />
+    <CustomBuild Include="res\uScan.ico" />
+    <CustomBuild Include="res\uScan.rc2">
+      <FileType>RC</FileType>
+    </CustomBuild>
+    <CustomBuild Include="res\uScanDoc.ico" />
+    <CustomBuild Include="res\ViewToolbar.bmp" />
+    <CustomBuild Include="res\XPIIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Release.txt" />
+    <None Include="res\AdjustPad32.bmp" />
+    <None Include="res\AdminViewToolbar.bmp" />
+    <None Include="res\bitmap1.bmp" />
+    <None Include="res\bitmap2.bmp" />
+    <None Include="res\bitmap3.bmp" />
+    <None Include="res\bitmap4.bmp" />
+    <None Include="res\Bypass32.bmp" />
+    <None Include="res\ExitRed32.bmp" />
+    <None Include="res\icon1.ico" />
+    <None Include="res\LoadGreen32.bmp" />
+    <None Include="res\Monitor.bmp" />
+    <None Include="res\MonitorCyan32.bmp" />
+    <None Include="res\NewGreen32.bmp" />
+    <None Include="res\Option32.bmp" />
+    <None Include="res\PAUSE.bmp" />
+    <None Include="res\Pause32.bmp" />
+    <None Include="res\Polygon_ROI.bmp" />
+    <None Include="res\PreferenceBrown32.bmp" />
+    <None Include="res\RDebugYellow32.bmp" />
+    <None Include="res\RFirstBlue32.bmp" />
+    <None Include="res\RLastBlue32.bmp" />
+    <None Include="res\RPS.ico" />
+    <None Include="res\SaveGreen32.bmp" />
+    <None Include="res\SelectedPadArrow.ico" />
+    <None Include="res\Start32.bmp" />
+    <None Include="res\Stop32.bmp" />
+    <None Include="res\Synapse Header_Mold.bmp" />
+    <None Include="res\TeachCyan32.bmp" />
+    <None Include="res\User32.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Reset32.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="uScan.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

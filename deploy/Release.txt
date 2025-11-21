@@ -1,0 +1,261 @@
+CM 1면 검사기 비전 S/W 릴리즈 정보
+-3.0.4.5
+	1. AutoParameter 
+	  1) 버그 수정
+	    a. Handler 가 비전이 NOT_READY 일 때도 수정할 수 있던 버그 수정
+	2. 빌드 후 이벤트 추가 (Deploy 폴더 사용)
+-3.0.4.4
+	1. AutoParameter 
+	  1) 기능 추가
+	    a. TCP 로 파일 받은 후 파라미터 로드 종료되면, 파일 삭제하는 로직 추가
+	2. 기타 변수명 및 주석 추가
+-3.0.4.3
+	1. AutoParameter 
+	  1) 로그 추가
+	    a. TCP 로 파일 받을 때, TCP 연결될 때, 모델 파라미터 바뀔 때 Log Dialog 에 로그 추가
+	  2) 버그 수정
+	    a. 기존 로딩된 모듈 수를 참조형태가 아니라, 값복사로 받도록 수정. (1 lot 의 1개 불량에 대해서도 다발불량 뜨는 이슈 대응)
+	  3) 기능 추가
+	    a. TCP 파라미터가 업데이트 될 때 메인 UI 의 버튼들 Disable 되도록 수정
+	2. 핸들러 UDP 통신 로그 수정
+	  1) 기존 UDP_Recevied 로그 숫자형태 였던걸 문자열 형태로 수정 (HS_STOP, RUN 등등)
+-3.0.4.2
+	1. 다발불량 로그 추가
+	  1) 다발불량 처리 시에 Lot ID, 모듈번호 등 로깅 (Lot 넘어갈 때 초기화 되는 지 추적)
+	2. 메모리 누수 수정
+	  1) 할콘 메모리 풀 증가 있음.
+-3.0.4.1
+	1. 리팩토링
+	  1) uScan.cpp 의 ExitInstance 에 누락된 메모리 해제 추가
+	  2) SavaManger 의 소멸자에 Thread Wait 기존 INFINITE 에서 500ms 로 수정
+	2. AutoParameter 기능 추가 
+	  1) TCP 파일 수신 시 Log Dialog 에 메세지 추가
+	  2) TCP 파일 수신 후 모델 업데이트 할 때 쓰레드 처리 삭제.
+	    a. 이제 TCP 파일 수신 후 모델 업데이트 중에는 조작 불가.
+-3.0.4.0
+	1. 리팩토링
+	  1) 항상 붙어다니는 모델 로드 관련 함수 3개를 하나로 래핑
+		a. ModelDataManager.cpp -> LoadModel()
+	  2) Operator View1, View2 이름 변경
+	    a. 각각 UI는 Current View, Prev View
+		b. 변수명은 TrayOperatorViewNowDlg, TrayOperatorViewPrevDlg
+	  3) uScan.cpp 에 붙어있던 CAboutDlg 클래스 추출
+	    a. AboutDlg.cpp, AboutDlg.h 파일로 추출함.
+-3.0.3.9 (HOTFIX)
+	1. 버그 수정
+	  1) TEMP 폴더에 저장되고 있는 "..._Vision_Para.csv" 저장 루틴 삭제 (사용하지 않는데 저장만 하는 중)
+-3.0.3.9
+	1. 버그 수정
+	  1) 처음 SW 시작 시 or 몇몇 상황에 "수율" UI 에 -nan 출력되던 버그 수정
+	2. Auto Parameter 기능 수정
+	  1) TCP 로 파라미터 받을 때, 실제 값이 바뀌었 을때만 모델 수정하도록 개선.
+	  2) 다발불량 관련 설정의 기본 값 수정 (불량비율 : 10% -> 5%, 최소 수량 : 60 -> 100)
+	3. 코드 리팩토링
+	  1) Algorithm.cpp 			: CommonAlgorithm 메서드에 값비교하는 헬퍼메서드 (ValidParam) 추가.
+	  2) ModelDataManager.cpp 	: ComparNRecord_BOOL 메서드 기존 메서드와 통합. 
+	4. 기타 
+	  1) UI 열 맞지 않던 다발불량 UI 위치조정
+	  2) 티칭 알고리즘 UI 의 Edit Contorl 에 숫자만 입력하도록 속성값 수정
+	  3) uScan Init 부분, PointGrayCam.cpp Init 부분 주석 추가
+	  4) AlgorithmParam 의 변수명에 주석 추가
+-3.0.3.8
+	1. 포켓 보정 이후 전체 보정 적용되도록 수정 및 포켓 보정 오프라인 시뮬 추가
+-3.0.3.7
+	1. Auto Parameter UI 수정
+	  1) UI 가독성 및 사용자경험을 위한 수정
+	2. Auto Parameter TCP 서버 재시작 로직 추가
+	  1) SW가 정상 종료 제외한 상황에서 재시작 할 때, TCP 서버가 함께 재시작되지않는 버그 수정
+	3. 기타 로그 중복된 개행문자 제거
+-3.0.3.6
+	1. Auto Parameter 버그 수정
+	  1) 다발불량 관련 값 중, 거리기준 (픽셀) 값이 사용되지 않고 있었음. 제대로 사용되도록 수정함.
+-3.0.3.5
+	1. 코드 리팩토링
+	  1) BarcodeDlg.cpp 코드 리팩토링 : 들여쓰기 통일
+	2. ADJ 지원 중단 반영
+	  1) 더 이상 지원되지 않으므로, Preference UI 의 ADJ 기능 Disable 처리.
+	  2) 메인 화면의 ADJ Connected 상태 정보창은 Visible False 로 처리.
+-3.0.3.4
+	1. Handler UDP 메세지 수정
+	  1) 기존 Handler 와 통신 실패 시 나오는 "메세지 수신 실패입니다" 메세지 수정함.
+	  	a. UDP 메세지 수신 실패라는 것을 명확히 표현하기 위함.
+	2. Algorithm.cpp 의 하드코딩 수정
+	  1) InspectFAI 의 Pocket Number 변수 값을 기존 하드코딩에서 현재 트레이당 모듈 수로 계산하도록 수정함.
+	3. AutoParameter 파일 Write 에러메세지 수정
+	  1) SaveChangeParamHistory() 에서 변경된 SPEC의 csv 파일 쓰기에 실패 했을 때의 에러메세지 추가.
+	4. 그 외 
+	  1) 소스파일을 EUC-KR 로 변경.
+	  2) ConfigBuild 정리 (사용되지 않는 Config 제거 및 정렬)
+-3.0.3.3
+	1. AutoParameter "Current_Recipe.txt" 포맷 수정
+	  1) 소숫점 자리수 4자리로 축소
+	    a. RMS 측에서 소숫점 8자리 이상은 읽을 수 없다하여 4자리로 축소.
+		b. 추후 다른 LOG 도 축소해야 할 지는 미정.
+-3.0.3.2
+	1. AutoParameter 관련 리팩토링 및 기능 추가
+	  1) 리팩토링
+	    a. AutoParameter 관련 변수에 주석 추가
+		b. AutoParameter 관련 메서드 주석 추가 및 변수명 변경 (InspectService.cpp, InspectSurmmary.cpp)
+	  2) 기능추가
+	    a. UI 상의 "1Lot 기준 불량 다발 발생 시 알람 기능 사용" 이 On / Off 되는것에 맞춰서 하위 UI 동기화 되도록 수정
+		b. 상기 알람이 꺼지면 관련 UI 변수들 또한 사용되지 않으므로, 직관성을 높이기 위함
+	2. SaveManager.cpp 수정
+	  1) 세이브 Thread 관련 버그를 수정
+-3.0.3.1
+	1. VH 버전과 Merge
+	  1) 변경사항
+	    a. Local Align 변수를 배열로 바꿔서 Thread 별로 적용되도록 함.
+-3.0.3.0
+	1. 모델 폴더 열기 버튼 추가
+	  1) 모델 Load 버튼에 "폴더 열기"버튼 하나 더 추가함.
+	  2) 버튼 누르면 모델 경로의 폴더가 열림
+-3.0.2.9
+	1. 폴더 선택 기능 수정
+	  1) 시험 결과 폴더, 디버그 폴더의 (Basic, Debug) 경로 선택기능 개선
+	    a. UI 를 BIF_NEWDIALOGSTYLE 플래그 사용하여 가독성 개선함.
+		b. 이제 폴더 선택 시 이전 저장된 폴더의 경로를 포커스 주도록 기능 추가함.
+-3.0.2.8
+	1. 버그 수정 사항
+	  1) Preference UI 상에서 EVMS 폴더를 변경해도 내부 변수에 업데이트 되지 않는 버그 수정.
+-3.0.2.7
+	1. 기타 수정 사항
+	  1) Build 후 이벤트 추가, 빌드 후 마다 Release.txt 파일이 Run 폴더에 복사되도록 함.
+	  2) 기존 Date Column 를 Date 와 Time 으로 분리 -> 3.0.2.6 패치내용. 현 버전에서 원복함.
+	  3) 초기화 되지 않아서 DDX_Check 함수 호출 시에 Garbage Value Warning 이 뜨는 것 초기화 코드 추가하여 수정함.
+	  	-> 다수의 ~Dlg.cpp. 파일 수정.
+-3.0.2.6
+	1. Auto Parameter 로그 수정
+	  1) 원인 미상의 LGIT 측 사유로, Parameter 상 Min 이라는 텍스트가 없어지게 되었음.따라서 해당부분 EVENT폴더의 csv 로그에도 "Min" 텍스트 제거
+	    a. 마찬가지로 Parsing 할 때도 "Min" 이 없는 상태로 파싱하도록 수정함
+		b. ps : "Max" 혹은 그외의 텍스트가 추후 사라지거나 생길 수도 있다고 함. 유의할 것.
+	  2) TURE -> TRUE 로그 오타 수정
+	  3) 더 이상 사용되지 않는 "Operator" Column 제거
+	2. MFC Warning 수정 중
+	  1) 현재 다수의 MFC Warning 발생 중. 주로 Radio Button의 Group Mismatch, DDX_Check 함수에 Garbage Value 가 넘어가는 것이 원인.
+	  2) 해당 부분 확인하여 수정 중
+-3.0.2.5
+	1. Auto Parameter 버그 수정
+	  1) LOTID 를 빈 값으로 검사하여 EVENT SPEC 로그가 기본 LOT ID 로 나오는 버그 수정
+	  2) TCP 로 Recipe 파라미터를 받았을 때 파라미터를 전달하는 부분의 코드가 Call By Value로 되어있어 업데이트 되지 않는 상황 수정
+	  3) 2)의 상황에 SPEC 문서가 생기지 않는 점 수정
+	  4) tcp server의 IP 가 NULL 일 때 바코드 Noread 발생하는 에러 수정 (기본값 Null이 아닌 192.168.1.12 로 설정)
+	2. TEMP -> EVENT 폴더로 로그파일을 MoveFile 할 때의 로그 추가
+	  1) 기존 스펙상 EVENT 폴더에 이름이 같은 파일이 있으면 TEMP 파일에서 MoveFile 진행하지 않음.
+	  2) 위와 같이 MoveFile 진행되지 않는 경우에 대해 Log 남기도록 수정함.
+	3. EVETN SPEC 로그 셀 값 수정
+	  1) 기존 "사용", "사용 안함" 의 한글 인 Cell 값을 영문으로 수정 (TRUE/FALSE)
+-3.0.2.4
+	1. Auto Parameter 기능 추가 중
+	  1) Preference UI를 통해 TCP Server Port 번호와 RMS Data 폴더 세팅 가능하도록 기능 추가.
+-3.0.2.3 
+	1. Auto Parameter 기능 추가 중
+	  1) 아직 Handler, LG CNS 와 연동이 되지 않음
+	  2) Port 번호는 21000 으로 Handler 와 합의함
+	2. Visual Studio 기준, Configuration 수정
+	  1) Output File 이 매크로 경로를 따르게 수정
+	  2) 현재 사용중인 4종의 빌드 버전을 Solution Configuration 에 추가
+	  3) Configuration 에 따라 Include Path, Output EXE File 이름, #define 매크로를 변경하도록 수정
+-3.0.2.0 ***
+	1. Handler UDP 통신 포트번호 8000(8001) -> 20000(20001) 변경
+-3.0.1.9
+	1. Auto Parameter 관련 전체 비전 파라미터 RMS 로그 구성 (1-Side_V_Image{번호}_Tab{번호}_파라미터명=파라미터값)
+	2. 설비 LAS 업로드 개별 설치로 인한 저장 스레드 수 6->4 축소 변경
+-3.0.1.8
+	1. 검출 파라미터 로그 저장 관련하여 최종 Spec-out 불량에 대해서만 로그 저장하도록 변경
+	2. 1Lot당 특정 %이상 동일 위치에 불량 발생 시 파라미터 로그 및 불량 피쳐 로그를 MOM Event 로그에 저장하여 MOM Event 발생하도록 추가(Auto Parameter 조정을 위한 LGIT에 이벤트 전달)
+-3.0.1.7
+	1. LAS 압축하여 저장 시 RawImage 제외한 나머지 이미지만 압축하여 업로드
+	2. ReviewImage FAIImage 저장여부 체크
+	3. 배럴/렌즈 검사 사용여부 사용자가 화면에서 체크 가능하도록 추가
+-3.0.1.6
+	1. Defect Feature 로그에 GV Feature 추가 (min, max, median, mean, dev)
+	2. LOT TIME 로그에 Code(불량코드) 칼럼 추가
+	3. LGIT 요청에 의한 불량코드 순서 변경
+-3.0.1.5
+	1. 핸들러 통신 끊김 현상 개선
+		- 검사/스캔 완료 후 Reply 없을시 재전송(Preference 옵션 : 사용유무, 재시도횟수, 응답대기시간, 재전송지연시간)
+		- 상태점검 버튼 추가 : 핸들러 통신 재연결 후 카메라 위치, 스캔 완료 여부, 검사완료 여부 확인하여 스캔완료 상태 동기화 및 재실행
+	2. 현재 인덱스 번호, 포켓 번호, Load/Scan/Insp 진행 상태 실시간 UI 시각화
+-3.0.1.4
+	1. 기존 1side 통합 SW와 Wedling SW 호환되도록 코드 수정
+	2. ReviewInfo_FAI 파일 추가하여 FAI 리뷰 파라미터화
+	3. 배럴-렌즈 ROI Shape매칭시 각 이미지가 아닌 Black 배럴 매칭 영상만 사용하여 ROI 검출 후 Template 매칭을 통해 위치 조정하도록 수정
+	4. 배럴-렌즈 ROI Templete매칭 티칭 옵션 추가(이미지별-컨투어별 선택 및 티칭 가능하도록 추가, 티칭 영역 위치 조정 및 Margin 영역 확인 기능 추가)
+	5. 디스플레이 로그창에 FAI Special NG(체크옵션) 카운트 및 불량 발생시 로그창 색상 변경되도록 추가.
+	6. D:\EVMS\OP\TDM\EVENT 경로에 Defect_Shape_Feature 로그 및 Vision_Detect_Para 로그 업로드 추가
+	7. 카메라 포지션 맵 생성시, Picker 방향 Y로 설정되어 있으면 트레이 Y열 값으로 티칭되도록 수정
+-3.0.1.3
+	1. 이미지 전처리 필터 추가
+	2. 포켓별 FAI 보정 추가
+	3. MBO 모드 추가(포켓별 반복촬상)
+-3.0.1.2
+	1. Welding 검사타입 추가(카메라, 조명, 그래버, 그랩 시퀀스, 검사시퀀스, 알고리즘 추가)
+-3.0.1.1
+	1. 로그 디스플레이 창에 연속 3랏에 대한 결과가 기록되도록 추가
+-3.0.1.0
+	1. 티칭 모드에서 각 이미지별 매칭된 ROI가 적용되도록 BlackBarrel 매칭 영상의 ROI가 전 이미지에서 보이는 현상 수정
+	2. ResultImage 통합저장 시 검출은 되었으나 스펙에 미달된 경우 검사결과가 안 뜨는 현상 수정
+-3.0.0.9
+	1. 로그 칼럼명 ECM 규칙 일치화 
+-3.0.0.8
+	1. Preference 분리배출 체크 & 알고리즘 티칭 탭 Special NG 체크 시 분리배출 기능 추가(불량코드:W)
+	2. LAS 이미지 압축저장 해제 시 LAS 업로드 안되는 현상 수정
+-3.0.0.7
+	1. SpringNG -> North Spring NG, East Spring NG 불량항목 분리
+	2. 딥러닝 검사 요청 시 불량항목을 모델명으로 검사요청 되도록 수정
+	3. Defect Shape Feature 로그 저장 여부 설정 추가
+-3.0.0.6
+	1. FAI-26 이미지 및 로그 저장, NG 분류 추가
+	2. PC Status 로그 추가 - CPU, HDD, Memory 관련 정보 저장
+	2. Lot End 후 프로세스 초기화 지연 시간 추가
+	3. LAS Zip 이미지 압축완료 전 대기 시간 추가
+	4. 검사전 ADJ 프로그램 실행확인 및 자동실행 추가
+-3.0.0.5
+	1. FAI-26 알고리즘 추가 (현재 FAI-51 적용 중으로 알고리즘만 추가)
+	2. Preference에 설비명 변경 가능하도록 변경 후 결과 로그에 설비명 적용
+	3. Memory 증가 시 UPH 감소 현상 수정
+	  1) 메모리 상한선 및 지속 시간에 따른 프로세스 초기화 진행
+-3.0.0.4
+	1. ResultImage에 현재 불량이 이전 모듈 불량에 중첩되서 나타나는 현상 수정
+	2. ResultImage 이름에 OK, NG가 결과와 일치하지 않는 현상 수정
+	3. FAI 로그에 Inner, Outer 포인트별 Edge Strength 추가  
+	4. 딥러닝 검사 시 시뮬레이션 모드 추가(판정은 로그에 남으나 전체 양품 배출)
+	5. Memory 증가 시 UPH 감소 현상 수정
+	  1) ResultImage 생성 시 OpenGL을 사용한 GPU 가속 추가
+	  2) LOT 투입 시 캐시 메모리 초기화 추가
+	  3) 불필요한 메모리 할당을 참조형식으로 변경
+-3.0.0.3
+	1. FAI-26으로 로그 남지 않는 버그 수정
+	2. 티칭모드에서 1-Point 에지 측정시 라인이 아닌 십자 포인트가 찍히도록 수정
+	3. FAI 로그에 Inner, Outer Circle 직경 추가
+-3.0.0.2
+	1. 검사 시 Local Align 모델이 초기화 되는 현상 개선
+-3.0.0.1
+	1. LAS 업로드 ZIP 파일 결과 이미지 누락 현상 정상화
+	2. FAI 결과 이미지, 로그 LAS 업로드 추가
+	3. 검사 로그에 FAI-51 불량명을 FAI-26으로 변경
+	4. 검사 속도 단축을 위해 Local Align ROI 계산시 동일 계산 시퀀스가 한 번만 진행되도록 변경
+	5. 메모리 증가시 UPH 감소되는 현상 개선을 위해 저장스레드 4개에서 8개로 변경
+-3.0.0.0
+	1. VS 2017, v141, CUDA 11.6 셋업
+	2. Preference에서 머신 검사 타입 설정 가능 하도록 추가
+	3. 이미지탭, 알고리즘 탭, 컨투어, 알고리즘 파라미터, 조명 배열화
+	4. 전 이미지탭 ROI 추가, ROI별 알고리즘 설정, ROI 선택 이벤트 추가
+	5. 전 이미지탭 글로벌 얼라인, 로컬 얼라인, ROI검사 적용
+	6. 머신 검사 타입별 조명페이지, 트리거 설정
+	7. 새로운 불량항목명 추가 (Spring NG)
+	8. 이미지타입, 불량항목명, 로그헤더 등 enum화
+	9. 이미지타입에 따른 저장 이미지명, 다이얼로그명, 탭명 동적 설정
+	10. 비등방 알고리즘 추가
+	11. 검사 내 저장 시퀀스 스레드화(4개)
+	12. 딥러닝 검사용 AI 검사 ROI 추가  
+	13. 딥러닝 검사 시퀀스 추가
+	14. AI 검사용 크롭, 리사이징 옵션 추가
+	15. AI 검사 로그 추가
+	16. 조명 페이지 동적으로 변경 가능하도록 추가
+	17. 최대 이미지 수 7장 추가
+	18. 이미지 그랩시 이미지별 Z축 위치 설정 추가
+	19. 에지 측정 관련  1포인트 측정 알고리즘, ROI 회전 변환 후 측정 알고리즘 추가
+	20. FAI-51 치수 측정 관련 FAI Inner, Outer ROI 추가
+	21. FAI-51 측정 시퀀스 및 알고리즘 추가
+	22. FAI-51 측정 결과 로그, 이미지(피팅 포인트, 컨투어) 추가
