@@ -96,33 +96,6 @@ void CuScanView::OnInitialUpdate()
 	SetTimer(0, 1000, NULL);
 	SetTimer(3, 60000, NULL);
 
-
-	if (THEAPP.Struct_PreferenceStruct.m_bIsUseAIInsp && THEAPP.Struct_PreferenceStruct.m_iADJImageCropType  == ADJ_TYPE_NETWORK)
-	{
-		// 통신쪽 초기화.
-		THEAPP.m_ADJClientService.Initialize();
-		BOOL bConnectExistAndError = FALSE;
-		
-		if (!THEAPP.m_ADJClientService.m_bConnect)
-		{
-			if (THEAPP.m_ADJClientService.m_arrClient.TCPConnect())
-			{
-				THEAPP.m_ADJClientService.m_bConnect = TRUE;
-			}
-			else
-			{
-				THEAPP.m_ADJClientService.m_bConnect = FALSE;
-				bConnectExistAndError = TRUE;
-			}
-		}
-
-		if (bConnectExistAndError)
-		{
-			THEAPP.m_ADJClientService.m_arrClient.TCPReset();
-			THEAPP.m_ADJClientService.ReStart();
-		}
-	}
-
 	ShowVersionText();
 
 	m_LabelCurMode.Init_Ctrl(_T("Arial Black"), 20, TRUE, BLACK, WHITE);
@@ -428,7 +401,6 @@ void CuScanView::OnBnClickedMfcbuttonFormLoad()
 			THEAPP.m_pModelDataManager->m_sModelName = dlgLoadModelDlg.m_EditSelectedModel;
 			THEAPP.m_pModelDataManager->SaveChangeParamHistory(FALSE);
 			THEAPP.m_pModelDataManager->LoadModel();
-			THEAPP.m_pModelDataManager->SaveRmsParamData();
 			THEAPP.m_bShowReviewWindow=FALSE;
 
 			THEAPP.m_pInspectSummary->GetDlgItem(IDC_MFCBUTTON_INSPECT_START)->EnableWindow(TRUE);
@@ -493,7 +465,6 @@ void CuScanView::OnBnClickedMfcbuttonFormSave()
 		if(AfxMessageBox("저장하시겠습니까?",MB_OKCANCEL|MB_SYSTEMMODAL)==IDOK)
 		{
 			THEAPP.m_pModelDataManager->SaveChangeParamHistory(TRUE);
-			THEAPP.m_pModelDataManager->SaveRmsParamData();
 			THEAPP.m_pModelDataManager->SaveModelData();
 
 			AfxMessageBox("저장 완료.", MB_ICONINFORMATION|MB_SYSTEMMODAL);
@@ -706,16 +677,6 @@ void CuScanView::OnBnClickedMfcbuttonFormPreference()
 	PreferenceDlg.m_iEditHandlerRetryWaitTime = THEAPP.Struct_PreferenceStruct.m_iHandlerRetryWaitTime;	// 25.06.24 - LeeGW
 	PreferenceDlg.m_iEditHandlerReplyWaitTime = THEAPP.Struct_PreferenceStruct.m_iHandlerReplyWaitTime;	// 25.06.24 - LeeGW
 
-	// Auto Parameter update - 250910, jhkim
-	// TCP Listner Socket Port
-	PreferenceDlg.m_iEditTCPServerPortNo = THEAPP.Struct_PreferenceStruct.m_iTCPServerPortNo;
-
-	if (!PreferenceDlg.m_bIsUseAIInsp && THEAPP.m_ADJClientService.m_bConnect)
-	{
-		THEAPP.m_ADJClientService.m_arrClient.TCPonClose();
-		THEAPP.m_ADJClientService.m_bConnect = FALSE;
-	}
-
 	if(PreferenceDlg.DoModal()==IDOK)
 	{
 		if(AfxMessageBox("저장하시겠습니까?",MB_OKCANCEL|MB_SYSTEMMODAL)==IDOK)
@@ -926,11 +887,6 @@ void CuScanView::OnBnClickedMfcbuttonFormPreference()
 			INI.Set_String(strSection, "RMS_SAVE_FOLDER_PATH", PreferenceDlg.m_strEditRmsSaveFolderPath);
 			//RMS end
 
-			// Auto Parameter update - 250910, jhkim
-			// TCP Listner Socket Port
-			strSection = "TCP_SERVER_OPTION";
-			INI.Set_Integer(strSection, "TCP_SERVER_PORT", PreferenceDlg.m_iEditTCPServerPortNo);
-
 			THEAPP.Struct_PreferenceStruct.m_bCheckBeamProject = PreferenceDlg.m_bCheckBeamProject;
 			THEAPP.Struct_PreferenceStruct.m_bSaveBMP = PreferenceDlg.m_bSaveBMP;
 			THEAPP.Struct_PreferenceStruct.m_bSaveJPG = PreferenceDlg.m_bSaveJPG;
@@ -1054,6 +1010,7 @@ void CuScanView::OnBnClickedMfcbuttonFormPreference()
 			THEAPP.Struct_PreferenceStruct.m_bChangeEvmsDirectory = PreferenceDlg.m_bCheckChangeEvmsDirectory; //Ver2629
 			THEAPP.m_bUseEvms = THEAPP.Struct_PreferenceStruct.m_bChangeEvmsDirectory; //Ver2629
 			THEAPP.Struct_PreferenceStruct.m_bUseAbsolutePathModel = PreferenceDlg.m_bCheckUseAbsolutePathModel; //Ver2629
+			THEAPP.Struct_PreferenceStruct.m_bUseAbsolutePathModel = FALSE;
 
 			THEAPP.Struct_PreferenceStruct.m_iResultTextPosX = PreferenceDlg.m_iEditResultTextPosX; //Result Text
 			THEAPP.Struct_PreferenceStruct.m_iResultTextPosY = PreferenceDlg.m_iEditResultTextPosY; //Result Text
@@ -1089,9 +1046,6 @@ void CuScanView::OnBnClickedMfcbuttonFormPreference()
 
 			THEAPP.Struct_PreferenceStruct.m_strRmsSaveFolderPath = PreferenceDlg.m_strEditRmsSaveFolderPath; //RMS
 
-			// Auto Parameter update - 250910, jhkim
-			// TCP Listner Socket Port
-			THEAPP.Struct_PreferenceStruct.m_iTCPServerPortNo = PreferenceDlg.m_iEditTCPServerPortNo;
 		}
 		else
 		{

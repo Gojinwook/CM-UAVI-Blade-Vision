@@ -79,6 +79,7 @@ using namespace std;
 
 // added by ParkJH
 #include <vector>
+#include <algorithm>
 
 //RYU 2007/02/21
 #include "TransClientCoff.h"
@@ -92,8 +93,6 @@ void gen_bin_image_xld_crop(const Hobject& Xld, Hobject* Image, long lMarginX = 
 void gen_bin_image_xld(const Hobject& Xld, Hobject* Image, long lMarginRight = 100, long lMarginBottom = 100);
 Herror intersection_contours_lc (const Hobject& Region, const Hobject& Contours, Hobject* pContoursIntersection);
 
-// TODO : need to select appropriate version of logging function - 250916, jhkim
-void DoubleLogOut(const char *format, ...);
 #define LOGGING(X)			{ TRACE(X + CString("\n")); }
 
 #endif // !defined(AFX_STDAFX_H__A17A74E6_03C5_40B8_986D_80E599544869__INCLUDED_)

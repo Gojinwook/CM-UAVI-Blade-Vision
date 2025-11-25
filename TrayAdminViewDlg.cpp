@@ -72,7 +72,6 @@ void CTrayAdminViewDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CTrayAdminViewDlg, CDialog)
 //	ON_WM_LBUTTONDOWN()
 	ON_WM_WINDOWPOSCHANGING()
-	ON_BN_CLICKED(IDC_BUTTON_OPEN_FOLDER_TRAY, &CTrayAdminViewDlg::OnBnClickedButtonOpenFolderTray)
 	ON_BN_CLICKED(IDC_BUTTONOPEN_PREV_TRAY, &CTrayAdminViewDlg::OnBnClickedButtonopenPrevTray)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
@@ -98,52 +97,6 @@ void CTrayAdminViewDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 	 lpwndpos->flags |= SWP_NOMOVE; 
  CDialog::OnWindowPosChanging(lpwndpos); 
 }
-
-void CTrayAdminViewDlg::OnBnClickedButtonOpenFolderTray()
-{
-	if(m_bPrevTray==TRUE)
-	{
-	if(m_bLoadTray)
-	{
-		THEAPP.m_pInspectAdminViewDlg->ShowWindow(SW_SHOWNA);
-		THEAPP.m_pInspectViewBarrelSurfaceDlg->Show();
-		THEAPP.m_pInspectViewBarrelEdgeDlg->Show();
-		THEAPP.m_pInspectViewLensInnerDlg->Show();
-		THEAPP.m_pInspectViewLensOuterDlg->Show();
-
-		if (THEAPP.m_iMachineInspType == MACHINE_SIDEFILL ||
-			THEAPP.m_iMachineInspType == MACHINE_FIDUCIAL ||
-			THEAPP.m_iMachineInspType == MACHINE_BRACKET)
-		{
-			THEAPP.m_pInspectViewExtra1Dlg->Show();
-			THEAPP.m_pInspectViewExtra2Dlg->Show();
-		}
-
-		THEAPP.m_pInspectViewOverayImageDlg->Show();
-		m_bLoadTray = FALSE;
-	}
-	else
-	{
-		THEAPP.m_pInspectAdminViewDlg->ShowWindow(SW_SHOWNA);
-		THEAPP.m_pInspectViewBarrelSurfaceDlg->ShowWindow(SW_HIDE);
-		THEAPP.m_pInspectViewBarrelEdgeDlg->ShowWindow(SW_HIDE);
-		THEAPP.m_pInspectViewLensInnerDlg->ShowWindow(SW_HIDE);
-		THEAPP.m_pInspectViewLensOuterDlg->ShowWindow(SW_HIDE);
-
-		if (THEAPP.m_iMachineInspType == MACHINE_SIDEFILL ||
-			THEAPP.m_iMachineInspType == MACHINE_FIDUCIAL ||
-			THEAPP.m_iMachineInspType == MACHINE_BRACKET)
-		{
-			THEAPP.m_pInspectViewExtra1Dlg->ShowWindow(SW_HIDE);
-			THEAPP.m_pInspectViewExtra2Dlg->ShowWindow(SW_HIDE);
-		}
-
-		THEAPP.m_pInspectViewOverayImageDlg->ShowWindow(SW_HIDE);
-		m_bLoadTray = TRUE;
-	}
-	}
-}
-
 
 void CTrayAdminViewDlg::OnBnClickedButtonopenPrevTray()
 {

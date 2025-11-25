@@ -39,29 +39,10 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnBnClickedButtonSetStartPosition();
-	afx_msg void OnBnClickedButtonSetXyPitch();
-	afx_msg void OnBnClickedButtonMoveNextModule();
-	afx_msg void OnBnClickedButtonMovePrevModule();
-	afx_msg void OnBnClickedButtonMoveUpperModule();
-	afx_msg void OnBnClickedButtonMoveDowner();
-	afx_msg void OnBnClickedButtonMakeHandlerPositionMap();
-	afx_msg void OnBnClickedButtonMovetoPosition();
-	afx_msg void OnStnClickedStaticStageNo();
-
-	double m_Edit_SetModulePitchX;
-	double m_Edit_SetModulePitchY;
-	double m_nDxHandlerPosX;
-	double m_nDxHandlerPosY;
-	double m_dEditSetStartPositionX;
-	double m_dEditSetStartPositionY;
-	double m_dEditSetInspPositionZ[MAX_IMAGE_TAB];
 
 	BOOL m_bCheckMatchingImage[MAX_IMAGE_TAB];
 
 	afx_msg void OnBnClickedButtonBarcodeSetting();
-	afx_msg void OnBnClickedButtonSetInspZPosition();
-	afx_msg void OnBnClickedButtonGetInspZPosition();
 	afx_msg void OnBnClickedButtonSetMatchingImageNumber();
 	afx_msg void OnBnClickedButtonSetFaiOption();
 };

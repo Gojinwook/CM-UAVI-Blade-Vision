@@ -73,36 +73,14 @@ public:
 	afx_msg void OnBnClickedButtonChangeLightvalue();
 	afx_msg void OnBnClickedGrab();
 	afx_msg void OnBnClickedOk();
-	afx_msg void OnBnClickedButtonMovetoPosition();
-	double m_nDxHandlerPosX_B;
-	afx_msg void OnBnClickedButtonSetStartPosition();
-	afx_msg void OnBnClickedButtonMakeHandlerPositionMap();
 	afx_msg void OnBnClickedButtonBarcodeTest();
 	int m_iEditBarcodeLT_X;
 	int m_iEditBarcodeLT_Y;
 	int m_iEditBarcodeRB_X;
 	int m_iEditBarcodeRB_Y;
+	int m_iRadioDispCamera;
 	afx_msg void OnBnClickedButtonBarcodeShowRoi();
 	afx_msg void OnBnClickedBarcodeSingleImageLoad();
-	afx_msg void OnBnClickedBarcodeMultipleImageLoadInspection();
-	afx_msg void OnBnClickedButtonBarcodeShiftHolecenterDisp();
-	afx_msg void OnBnClickedButtonBarcodeShiftHolecenterNodisp();
-	afx_msg void OnBnClickedButtonBarcodeShiftHolecenterSave();
-
-	//Barcode Hole Center Start
-	BOOL m_bCheckUseBarcodeShiftHoleCenter;
-	int m_iEditBarcodeShiftHoleCenterDilation;
-	int m_iEditBarcodeShiftHoleCenterGvMin;
-	int m_iEditBarcodeShiftHoleCenterGvMax;
-	int m_iEditBarcodeShiftHoleCenterGvClosing;
-	Hobject m_HDispHoleRgn;
-	Hobject m_HHoleRgn;
-	Hobject m_HDispHoleSearchRgn;
-	Hobject m_HDispBarcodeCenterXLD;
-	Hobject m_HDispHoleCenterXLD;
-	double m_dBarcodeCenterX;
-	double m_dBarcodeCenterY;
-	double m_dHoleCenterX;
-	double m_dHoleCenterY;
-	//Barcode Hole Center End
+	afx_msg void OnBnClickedRadioCamera1();
+	afx_msg void OnBnClickedRadioCamera2();
 };

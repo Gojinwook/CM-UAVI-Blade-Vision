@@ -242,7 +242,7 @@ BOOL GTRegion::Load(HANDLE hFile, int iModelVersion)
 	{
 		CString strErr;
 		strErr.Format("Halcon Exception [GTRegion::Load] : %s", except.message);
-		DoubleLogOut(strErr);
+		THEAPP.DoubleLogOut(strErr);
 	}
 	return TRUE;
 }

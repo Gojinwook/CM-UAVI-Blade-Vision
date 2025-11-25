@@ -652,10 +652,10 @@ const static char* g_sImageName[MAX_MACHINE_TYPE][MAX_TRIGGER_TYPE] =
 	},
 	// Welding
 	{
-		_T("Lens1"),
-		_T("Welding1"),
-		_T("Welding2"),
-		_T("Bracket1"),
+		_T("Image1"),
+		_T("Image2"),
+		_T("Image3"),
+		_T("Image4"),
 		_T("Extra1"),
 		_T("Extra2"),
 		_T("Extra3"),

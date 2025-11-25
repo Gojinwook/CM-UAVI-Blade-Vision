@@ -491,23 +491,8 @@ BOOL CuScanApp::InitInstance()
 	m_pInspectResultDlg->GetDlgItem(IDC_EDIT_LOT_ID)->EnableWindow(FALSE);
 #endif
 
-	// TCP Server for Auto Parameter update - 250910, jhkim
-	int iTCPPortNo = Struct_PreferenceStruct.m_iTCPServerPortNo;
-
-	m_bTCPServerListenerOpened = m_TCPServerListener.OpenTCPServer(iTCPPortNo);
-	// TODO : OpenTCPServer 실패시 재시도 로직 필요
-	//      : SW 프로세스 재시작 등
-	if (m_bTCPServerListenerOpened != TRUE)
-	{
-		m_TCPServerListener.CloseTCPServer();
-
-		m_bTCPServerListenerOpened = m_TCPServerListener.OpenTCPServer(iTCPPortNo);
-		if (m_bTCPServerListenerOpened != TRUE)
-			m_TCPServerListener.CloseTCPServer();
-	}
-
 	THEAPP.m_pHandlerService->Set_StatusUpdate(VS_READY);
-	DoubleLogOut("Init Done. %d", THEAPP.m_pHandlerService->m_nInspectPCStatus);
+	THEAPP.DoubleLogOut("Init Done. %d", THEAPP.m_pHandlerService->m_nInspectPCStatus);
 
 	return TRUE;
 }
@@ -527,10 +512,6 @@ int CuScanApp::ExitInstance()
 	CString strSection = "Status";
 	INI.Set_String(strSection, "LotID", m_pInspectResultDlg->CurrentLotID);
 	INI.Set_String(strSection, "ModelID", m_pModelDataManager->m_sModelName);
-
-	// TCP Server for Auto Parameter update - 250910, jhkim
-	if (m_bTCPServerListenerOpened)
-		m_TCPServerListener.CloseTCPServer();
 
 	if (m_bRun)
 	{
@@ -903,6 +884,7 @@ void CuScanApp::ReadPreferenceINI()
 
 	Struct_PreferenceStruct.m_bChangeEvmsDirectory = INI.Get_Bool(strSection, "EVMS_USE_CHANGE_DIRECTORY", FALSE);
 	Struct_PreferenceStruct.m_bUseAbsolutePathModel = INI.Get_Bool(strSection, "EVMS_USE_ABSOLUTE_MODEL_PATH", FALSE);
+	Struct_PreferenceStruct.m_bUseAbsolutePathModel = FALSE;
 
 	// Ver2629 End
 
@@ -917,11 +899,6 @@ void CuScanApp::ReadPreferenceINI()
 	Struct_PreferenceStruct.m_iResultTextPosY = INI.Get_Integer(strSection, "RESULT_TEXT_POS_Y", 0);
 	Struct_PreferenceStruct.m_iResultTextSize = INI.Get_Integer(strSection, "RESULT_TEXT_SIZE", 0);
 	// Result Text End
-
-	// Auto Parameter update - 250910, jhkim
-	// TCP Listner Socket Port
-	strSection = "TCP_SERVER_OPTION";
-	Struct_PreferenceStruct.m_iTCPServerPortNo = INI.Get_Integer(strSection, "TCP_SERVER_PORT", 21000);
 
 	m_iMachineInspType = Struct_PreferenceStruct.m_iMachineInspType;
 	if (m_iMachineInspType < MACHINE_NORMAL || m_iMachineInspType > MACHINE_WELDING)
@@ -1188,272 +1165,6 @@ void CuScanApp::OnHelp()
 	aboutDlg.DoModal();
 }
 
-// Called by CModelDataManager::SaveRmsParamData()
-// RMS Parameter data 저장 (Current_Recipe.txt)
-void CuScanApp::SaveRmsData(CString strFilePath, CString strModelName, map<CString, CString> strData)
-{
-	// 1. 상위 폴더 자동 생성
-	WIN32_FIND_DATA FindData;
-	HANDLE hFind = FindFirstFile(strFilePath, &FindData);
-
-	if (hFind == INVALID_HANDLE_VALUE)
-	{
-		CString csToken(_T(""));
-		CString csResultPath(_T(""));
-		BOOL bNetworkIP = FALSE;
-		int nStart = 0, nEnd;
-
-		if (strFilePath.Find("\\\\", 0) == 0)
-		{
-			bNetworkIP = TRUE;
-			strFilePath.Delete(0, 2);
-		}
-
-		if (bNetworkIP)
-			strFilePath.Delete(0, 2);
-
-		while ((nEnd = strFilePath.Find('\\', nStart)) >= 0)
-		{
-			AfxExtractSubString(csToken, strFilePath, nStart, '\\');
-			if (!csToken.Compare(""))
-				break;
-
-			csResultPath += (nStart == 0 && bNetworkIP ? "\\\\" : "\\") + csToken;
-
-			if (GetFileAttributes(csResultPath) == -1)
-				CreateDirectory(csResultPath, NULL);
-
-			nStart = nEnd + 1;
-		}
-	}
-	FindClose(hFind);
-
-	// 2. 기존 파일에서 데이터 읽기
-	CString strRecipeFile = strFilePath + "\\Current_Recipe.txt";
-	map<CString, CString> mergedData;
-
-	CString key, value;
-	CFile fileRead;
-	if (fileRead.Open(strRecipeFile, CFile::modeRead))
-	{
-		CArchive arRead(&fileRead, CArchive::load);
-		CString strGetOneLine;
-		while (arRead.ReadString(strGetOneLine))
-		{
-			if ((strGetOneLine.GetLength() != 0) && (strGetOneLine.Find('=') != -1))
-			{
-				AfxExtractSubString(key, strGetOneLine, 0, '=');
-				AfxExtractSubString(value, strGetOneLine, 1, '=');
-				mergedData[key] = value;
-			}
-		}
-
-		if (!arRead.IsBufferEmpty())
-			arRead.Flush();
-		if (arRead.IsLoading())
-			arRead.Close();
-		if (fileRead.m_hFile != CFile::hFileNull)
-			fileRead.Close();
-	}
-
-	// 3. 새 데이터 덮어쓰기
-	for (const auto &item : strData)
-	{
-		key = item.first;
-		value = item.second;
-
-		mergedData[key] = value;
-	}
-
-	// 4. Recipe_Name 설정
-	const CString RECIPE_SECTION = _T("Recipe_Name");
-	mergedData[RECIPE_SECTION] = strModelName;
-
-	// 5. TEMP 파일 생성
-	CStdioFile fileWrite;
-	CString strTmpFileForWrite;
-	strTmpFileForWrite.Format(strFilePath + "\\Current_Recipe_TEMP.txt");
-	if (fileWrite.Open(strTmpFileForWrite, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary))
-	{
-		// Recipe_Name 맨 앞에
-		CString firstLine;
-		firstLine.Format(_T("%s=%s\r\n"), RECIPE_SECTION, mergedData[RECIPE_SECTION]);
-		fileWrite.Write(firstLine, firstLine.GetLength() * sizeof(TCHAR));
-
-		CString line;
-		for (const auto &item : mergedData)
-		{
-			// Recipe Nmae은 헤더니까 제외하고.
-			if (item.first == RECIPE_SECTION)
-				continue;
-
-			line.Format(_T("%s=%s\r\n"), item.first, item.second);
-			fileWrite.Write(line, line.GetLength() * sizeof(TCHAR));
-		}
-
-		fileWrite.Close();
-	}
-
-	// 6. 원본 파일 삭제 후 임시 파일 교체
-	if (_access(strRecipeFile, 0) == 0)
-		DeleteFile(strRecipeFile);
-
-	if (_access(strTmpFileForWrite, 0) == 0)
-		rename(strTmpFileForWrite, strRecipeFile);
-}
-
-// Called by CModelDataManager::SaveLightInfo ()
-void CuScanApp::SaveRmsData(CString strFilePath, CString strModelName, CString strSection, CString strData) // RMS
-{
-	// 1. 지정된 파일 경로의 상위폴더들이 없으면 자동 생성 - start
-	WIN32_FIND_DATA FindData;
-	HANDLE hFind = FindFirstFile(strFilePath, &FindData);
-
-	if (hFind == INVALID_HANDLE_VALUE)
-	{
-		CString csToken(_T(""));
-		CString csResultPath(_T(""));
-		BOOL bNetworkIP = FALSE;
-		int nStart = 0, nEnd;
-
-		if (strFilePath.Find("\\\\", 0) == 0)
-		{
-			bNetworkIP = TRUE;
-			strFilePath.Delete(0, 2);
-		}
-
-		if (bNetworkIP)
-			strFilePath.Delete(0, 2);
-
-		while ((nEnd = strFilePath.Find('\\', nStart)) >= 0)
-		{
-			AfxExtractSubString(csToken, strFilePath, nStart, '\\');
-			if (!csToken.Compare(""))
-				break;
-
-			csResultPath += (nStart == 0 && bNetworkIP ? "\\\\" : "\\") + csToken;
-
-			if (GetFileAttributes(csResultPath) == -1)
-				CreateDirectory(csResultPath, NULL);
-
-			nStart += 1;
-		}
-	}
-	FindClose(hFind);
-	// 1. 지정된 파일 경로의 상위폴더들이 없으면 자동 생성 - end
-
-	// 2. 기존 파일에서 정보 추출 - start
-	CString strFile = strFilePath + "\\Current_Recipe.txt";
-	CStdioFile FilePointerRead;
-	vector<CString> strReadFileContents = {};
-	CFile fileRead;
-
-	if (fileRead.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeRead))
-	{
-		CArchive arRead(&fileRead, CArchive::load);
-		CString strGetOneLine;
-
-		while (arRead.ReadString(strGetOneLine))
-			if (strGetOneLine.GetLength() != 0)
-				strReadFileContents.push_back(strGetOneLine);
-
-		arRead.Close();
-		fileRead.Close();
-	}
-	// 2. 기존 파일에서 정보 추출 - end
-
-	// 3. Data 넣을 파일 생성 및 추출 - start
-	CString strFileForWrite;
-	strFileForWrite.Format(strFilePath + "\\Current_Recipe_TEMP.txt");
-	const CString RECIPE_SECTION = "Recipe_Name";
-
-	CFile fileWrite;
-	if (fileWrite.Open(strFileForWrite, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite))
-	{
-		CString strTempWrite = "";
-		if (strReadFileContents.size() == 0)
-		{
-			strTempWrite.Format("%s=%s\r\n", RECIPE_SECTION, strModelName);
-			fileWrite.Write(strTempWrite, strTempWrite.GetLength());
-			strTempWrite.Format("%s=%s\r\n", strSection, strData);
-			fileWrite.Write(strTempWrite, strTempWrite.GetLength());
-		}
-		else
-		{
-			BOOL bExistModelName = FALSE;
-			BOOL bExistSection = FALSE;
-			CString strReadSection;
-			CString strReadData;
-			for (int i = 0; i < strReadFileContents.size(); i++) // 해당 레시피의 새로 추가되는 section은 밑에 내용 추가되게 작업
-			{
-				if (!strReadFileContents.at(i).Find('='))
-					continue;
-				else
-				{
-					AfxExtractSubString(strReadSection, strReadFileContents.at(i), 0, '=');
-					AfxExtractSubString(strReadData, strReadFileContents.at(i), 1, '=');
-					strTempWrite = strReadFileContents.at(i) + "\r\n";
-
-					if (bExistModelName == TRUE && strReadSection == RECIPE_SECTION && bExistSection == FALSE) // CASE1-1 : 레시피는 존재하나 섹션은 없고 다음 레시피로 넘어가는 경우. 해당 레시피 제일 아래 삽입
-					{
-						CString strInsertData = strSection + '=' + strData + "\r\n";
-						fileWrite.Write(strInsertData, strInsertData.GetLength());
-						bExistSection = TRUE;
-					}
-
-					if (strReadSection == RECIPE_SECTION) // 동일 레시피인지 확인
-					{
-						bExistModelName = TRUE;
-						strTempWrite.Format("%s=%s\r\n", RECIPE_SECTION, strModelName);
-					}
-					if (bExistModelName == TRUE) // CASE2 : 레시피도 존재하고 해당 섹션도 존재하는 경우는 Data만 대체
-					{
-						if (strReadSection == strSection)
-						{
-							bExistSection = TRUE;
-							strTempWrite.Format("%s=%s\r\n", strSection, strData);
-						}
-					}
-					fileWrite.Write(strTempWrite, strTempWrite.GetLength());
-				}
-			}
-
-			if (bExistSection == FALSE)
-			{
-				if (bExistModelName == TRUE) // CASE1-2 : 레시피는 존재하나 섹션은 없는 상태로 끝난 경우. 제일 아래 삽입
-				{
-					CString strInsertData = strSection + '=' + strData + "\r\n";
-					fileWrite.Write(strInsertData, strInsertData.GetLength());
-				}
-				else // CASE3 : 레시피 자체가 없는 경우. 레시피 추가, 섹션과 데이터 추가
-				{
-					strTempWrite.Format("%s=%s\r\n", RECIPE_SECTION, strModelName);
-					fileWrite.Write(strTempWrite, strTempWrite.GetLength());
-					strTempWrite.Format("%s=%s\r\n", strSection, strData);
-					fileWrite.Write(strTempWrite, strTempWrite.GetLength());
-				}
-			}
-		}
-		fileWrite.Close();
-	}
-	strReadFileContents.clear();
-	// 3. Data 넣을 파일 생성 및 추출 - end
-
-	// 4. 기존 파일 삭제 및 임시 파일 이름을 Replace - start
-	if (_access(strFile, 0) == 0)
-	{
-		chmod(strFilePath, 0777);
-		DeleteFileA((LPCSTR)strFile);
-	}
-
-	if (_access(strFileForWrite, 0) == 0)
-	{
-		chmod(strFilePath, 0777);
-		rename(strFileForWrite, strFile);
-	}
-	// 4. 기존 파일 삭제 및 임시 파일 이름을 Replace - end
-}
-
 void CuScanApp::SaveLog(CString strLog)
 {
 	SYSTEMTIME time;
@@ -1468,6 +1179,43 @@ void CuScanApp::SaveLog(CString strLog)
 
 	m_pSaveManager->SaveLog(strSave, strFile); // LeeGW
 }
+
+// 로그 메시지를 두 군데(디버그 출력 창, LogEvent.txt)에 동시에 출력 - 250916, jhkim
+void CuScanApp::DoubleLogOut(const char *format, ...)
+{
+	CString strOutMsg;
+	va_list args;
+
+	// va_start는 가변 인자 목록을 초기화합니다.
+	// 두 번째 인자는  바로 앞에 위치한 마지막 고정 인자입니다.
+	va_start(args, format);
+
+	// 로그 메시지를 저장할 버퍼를 정의합니다.
+	// 충분히 큰 크기로 설정하거나 동적으로 할당할 수 있습니다.
+	std::vector<char> buffer(512);
+
+	// vprintf와 유사한 vsnprintf를 사용하여 안전하게 문자열을 포맷팅합니다.
+	// 이는 버퍼 오버플로우를 방지하는 데 유용합니다.
+	int nWritten = vsnprintf(buffer.data(), buffer.size(), format, args);
+
+	// vsnprintf가 -1을 반환하면 버퍼 크기가 충분하지 않았음을 의미합니다.
+	if (nWritten < 0)
+	{
+		// 더 큰 버퍼로 다시 시도하거나, 오류를 출력합니다.
+	}
+	else
+	{
+		strOutMsg.Format("%s", buffer.data());
+	}
+
+	// va_end는 가변 인자 목록 사용을 종료하고 정리합니다.
+	va_end(args);
+
+	AfxTrace(strOutMsg + "\n");
+
+	THEAPP.SaveLog(strOutMsg);
+}
+
 
 void CuScanApp::SaveDetectLog(CString strLog)
 {
@@ -4449,10 +4197,10 @@ void CuScanApp::RestartProcess()
 {
 	char exePath[MAX_PATH];
 
-	DoubleLogOut("[CuScanApp::RestartProcess]Process Restarting...");
+	THEAPP.DoubleLogOut("[CuScanApp::RestartProcess]Process Restarting...");
 	if (GetModuleFileName(NULL, exePath, MAX_PATH) == 0)
 	{
-		DoubleLogOut("Failed to get executable path!");
+		THEAPP.DoubleLogOut("Failed to get executable path!");
 		return;
 	}
 
@@ -4466,11 +4214,11 @@ void CuScanApp::RestartProcess()
 		DWORD waitResult = WaitForInputIdle(pi.hProcess, 1000); // 1초 대기
 		if (waitResult == 0)
 		{
-			DoubleLogOut("New process started and is responsive.");
+			THEAPP.DoubleLogOut("New process started and is responsive.");
 		}
 		else
 		{
-			DoubleLogOut("Warning: New process may not be responsive (WaitForInputIdle timeout).");
+			THEAPP.DoubleLogOut("Warning: New process may not be responsive (WaitForInputIdle timeout).");
 		}
 
 #ifdef INLINE_MODE
@@ -4482,7 +4230,7 @@ void CuScanApp::RestartProcess()
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 
-		DoubleLogOut("Current process exiting for restart.");
+		THEAPP.DoubleLogOut("Current process exiting for restart.");
 		PostQuitMessage(0); // 현재 프로세스 종료
 	}
 	else

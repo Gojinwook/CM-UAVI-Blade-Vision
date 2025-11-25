@@ -216,9 +216,6 @@
     <ClCompile Include="AutoCalService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TCPClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AJinAXL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -232,15 +229,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SaveManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ADJClientService.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TCPServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TCPFileReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AdminPasswordDlg.cpp">
@@ -525,12 +513,6 @@
     <ClInclude Include="AutoCalService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TCPClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TCPDefine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SafeQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -549,19 +531,10 @@
     <ClInclude Include="SaveManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ADJClientService.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ThreadManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TCPServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigBuildVersion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TCPFileReceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AdminPasswordDlg.h">

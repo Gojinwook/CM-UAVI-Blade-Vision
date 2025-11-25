@@ -152,9 +152,6 @@ public:
 	void UpdateParamChange();	//0531
 	void SaveModelData();
 	void SaveChangeParamHistory(BOOL bSave);
-	// Save Current_Recipe.txt (RMS Parameter data) - 250905, jhkim
-	void SaveRmsParamData();
-	void LoadRmsParamData(CString sPath);
 	//////////////////////////////////// Initialize Model Data
 	void LoadModel();
 	void LoadModelBaseData(); // 모션 위치 & 모듈 넘버 얻어옴

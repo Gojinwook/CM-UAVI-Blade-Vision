@@ -143,7 +143,6 @@ public:
 	int m_iADJDelayTime;
 	
 	afx_msg void OnBnClickedCheckUseSuakit();
-	afx_msg void OnBnClickedButtonAdjconnect();
 	afx_msg void OnBnClickedButtonFindAdjFile();
 
 	// ADJ Disable - 251021, jhkim
@@ -221,18 +220,11 @@ public:
 	int	m_iEditHandlerRetryWaitTime;	// 25.06.23 - LeeGW
 	int	m_iEditHandlerReplyWaitTime;	// 25.06.23 - LeeGW
 
-	// Auto Parameter update - 250910, jhkim
-	// TCP Listner Socket Port
-	CEdit	m_ctrlEditTCPServerPortNo;
-	CButton m_ctrlButtonTCPServerState;
-	int	m_iEditTCPServerPortNo;
-
 	// RSM Data Folder Set UI
 	CButton m_ctrlButtonFindfolderRmsdata;
 	CEdit m_ctrlEditRmsSaveFolderPath;
 	
 	// AutoParam. 251014, jhkim
-	afx_msg void OnBnClickedButtonTcpserverstate();
 	afx_msg void OnBnClickedButtonFindfolderRmsdata();
 
 	// 다발불량 관련 UI 들

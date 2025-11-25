@@ -48,7 +48,6 @@ public:
 	virtual BOOL OnInitDialog();
 //	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
-	afx_msg void OnBnClickedButtonOpenFolderTray();
 	afx_msg void OnBnClickedButtonopenPrevTray();
 	afx_msg void OnPaint();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

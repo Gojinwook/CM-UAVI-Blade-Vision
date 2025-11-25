@@ -1354,24 +1354,6 @@ UINT ResultSaveThread(LPVOID lp)
 							THEAPP.m_pInspectAdminViewHideDlg->iWhiteDotDefectSortingNumber = -1;
 #pragma endregion
 
-							// *** AI 검사 추가 - LeeGW ***
-#pragma region AI Inspection (Not Used - 251113, jhkim)
-							if (THEAPP.Struct_PreferenceStruct.m_bIsUseAIInsp)
-							{
-								THEAPP.m_ADJClientService.DoDeeplearningInspection(iThreadCount,
-									THEAPP.m_pInspectService->m_sLotID_H, THEAPP.m_pInspectService->m_iTrayNo_H, iModuleNo, 
-									pInspectService->m_pInspectAlgorithm[iThreadCount].m_sBarcodeResult);
-
-								for (iImageIdx = 0; iImageIdx < MAX_IMAGE_TAB; iImageIdx++)
-								{
-									copy_obj(pInspectService->m_pInspectAlgorithm[iThreadCount].m_HImageAIDefectRgn[iImageIdx], &pInspectService->m_pInspectAlgorithm[iThreadCount].m_HdefectExtra[iImageIdx], 1, 1);
-									if (iImageIdx < BARREL_LENS_IMAGE_TAB)
-										copy_obj(pInspectService->m_pInspectAlgorithm[iThreadCount].m_HImageAIDefectRgn[iImageIdx], &pInspectService->m_pInspectAlgorithm[iThreadCount].m_HdefectBarrelLens[iImageIdx], 1, 1);
-
-								}
-							}
-#pragma endregion
-							// *** AI 검사 추가 - LeeGW ***
 							//////////////// 결과 저장 및 출력을 위해(WriteResultFile) 베럴 판정 MinArea 통과한 영역을 InspectAdminViewHideDlg 로 보낸다
 #pragma region Apply Inspection condition for Barrel Defects & Save Result
 							Hobject HTopBarrelRgn, HBottomBarrelRgn, HInnerBarrelRgn;
@@ -3812,7 +3794,7 @@ UINT LotDetailDefectErrorThread(LPVOID lp)
 
 	try
 	{
-		DoubleLogOut("[LotDetailDefectErrorThread] Start - LotID : %s, MzIdx : %d, NoInspectModule : %d", (LPSTR)(LPCSTR)sLotID, iThreadMzIdx, iNoInspectModule);
+		THEAPP.DoubleLogOut("[LotDetailDefectErrorThread] Start - LotID : %s, MzIdx : %d, NoInspectModule : %d", (LPSTR)(LPCSTR)sLotID, iThreadMzIdx, iNoInspectModule);
 		// 변수 초기화
 		// MAX_MULTIPLE_DEFECT_NUMBER : Defect 종류, 총 25종 - 251013, jhkim
 		Hobject HConcatMultipleDefecRgn[MAX_MULTIPLE_DEFECT_NUMBER];

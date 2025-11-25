@@ -545,13 +545,13 @@ SaveParam CSaveManager::PopSaveParam()
 void LogFileMoveMsg (BOOL bIsMoveSuccess, CString sSrcPath, CString sDstPath)
 {
 	if (bIsMoveSuccess == TRUE)
-		DoubleLogOut("[SaveLasEvent] Move LOG Success. DstPath : %s", sDstPath);
+		THEAPP.DoubleLogOut("[SaveLasEvent] Move LOG Success. DstPath : %s", sDstPath);
 	else
 	{
 		int iErr = GetLastError();
 		CString strErrMsg;
-		DoubleLogOut("[SaveLasEvent](1/3) MoveFile FAIL. Source : %s", sSrcPath);
-		DoubleLogOut("[SaveLasEvent](2/3) MoveFile FAIL. Dest.  : %s", sDstPath);
+		THEAPP.DoubleLogOut("[SaveLasEvent](1/3) MoveFile FAIL. Source : %s", sSrcPath);
+		THEAPP.DoubleLogOut("[SaveLasEvent](2/3) MoveFile FAIL. Dest.  : %s", sDstPath);
 		switch (iErr)
 		{
 		case ERROR_FILE_NOT_FOUND: // ERROR_FILE_NOT_FOUND
@@ -580,6 +580,6 @@ void LogFileMoveMsg (BOOL bIsMoveSuccess, CString sSrcPath, CString sDstPath)
 			break;
 		}
 
-		DoubleLogOut("[SaveLasEvent](3/3) MoveFile FAIL. ErrMsg : %s", (LPCTSTR)strErrMsg);
+		THEAPP.DoubleLogOut("[SaveLasEvent](3/3) MoveFile FAIL. ErrMsg : %s", (LPCTSTR)strErrMsg);
 	}
 }

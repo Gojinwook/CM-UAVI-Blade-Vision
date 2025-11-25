@@ -242,10 +242,6 @@ CPreferenceDlg::CPreferenceDlg(CWnd *pParent /*=NULL*/)
 	m_iEditHandlerRetryCount = 0;	 // 25.05.13 - LeeGW
 	m_iEditHandlerRetryWaitTime = 0; // 25.05.13 - LeeGW
 	m_iEditHandlerReplyWaitTime = 0; // 25.05.13 - LeeGW
-
-	// Auto Parameter update - 250910, jhkim
-	// TCP Listner Socket Port
-	m_iEditTCPServerPortNo = 0;
 }
 
 CPreferenceDlg::~CPreferenceDlg()
@@ -411,12 +407,6 @@ void CPreferenceDlg::DoDataExchange(CDataExchange *pDX)
 	DDX_Text(pDX, IDC_EDIT_HANDLER_RETRY_WAITTIME, m_iEditHandlerRetryWaitTime); // 통신 재시도 - LEEGW
 	DDX_Text(pDX, IDC_EDIT_HANDLER_REPLY_WAITTIME, m_iEditHandlerReplyWaitTime); // 통신 재시도 - LEEGW
 
-	// Auto Parameter update - 250910, jhkim
-	// TCP Listner Socket Port
-	DDX_Control(pDX, IDC_EDIT_TCP_SERVER_PORT_NO, m_ctrlEditTCPServerPortNo);
-	DDX_Control(pDX, IDC_BUTTON_TCPServerState, m_ctrlButtonTCPServerState);
-	DDX_Text(pDX, IDC_EDIT_TCP_SERVER_PORT_NO, m_iEditTCPServerPortNo);
-
 	// RMS Folder Set UI
 	DDX_Control(pDX, IDC_BUTTON_FINDFOLDER_RMSDATA, m_ctrlButtonFindfolderRmsdata);
 	DDX_Control(pDX, IDC_EDIT_RMS_SAVE_FOLDER_PATH, m_ctrlEditRmsSaveFolderPath);
@@ -441,10 +431,8 @@ ON_BN_CLICKED(IDC_BN_DISK_CLEAN, &CPreferenceDlg::OnBnClickedBnDiskClean)
 ON_BN_CLICKED(IDC_CHK_DISK_TERM, &CPreferenceDlg::OnBnClickedChkDiskTerm)
 ON_BN_CLICKED(IDC_BUTTON_SET_SERIAL, &CPreferenceDlg::OnBnClickedButtonSetSerial)
 ON_BN_CLICKED(IDC_CHECK_USE_AI_INSP, &CPreferenceDlg::OnBnClickedCheckUseSuakit)
-ON_BN_CLICKED(IDC_BUTTON_ADJConnect, &CPreferenceDlg::OnBnClickedButtonAdjconnect)
 ON_BN_CLICKED(IDC_CHECK_CHANGE_EVMS_DIRECTORY, &CPreferenceDlg::OnBnClickedCheckChangeEvmsDirectory)
 ON_BN_CLICKED(IDC_BUTTON_FIND_ADJ_FILE, &CPreferenceDlg::OnBnClickedButtonFindAdjFile)
-ON_BN_CLICKED(IDC_BUTTON_TCPServerState, &CPreferenceDlg::OnBnClickedButtonTcpserverstate)
 ON_BN_CLICKED(IDC_BUTTON_FINDFOLDER_RMSDATA, &CPreferenceDlg::OnBnClickedButtonFindfolderRmsdata)
 ON_BN_CLICKED(IDC_CHECK_USE_LOT_DEFECT_ALARM, &CPreferenceDlg::OnBnClickedCheckUseLotDefectAlarm)
 ON_BN_CLICKED(IDC_CHECK_USE_LOT_DEFECT_ALARM_AREA_SIMILARITY, &CPreferenceDlg::OnBnClickedCheckUseLotDefectAlarmAreaSimilarity)
@@ -479,11 +467,6 @@ BOOL CPreferenceDlg::OnInitDialog()
 		GetDlgItem(IDC_CHECK_APPLY_AI_SIMULATION)->EnableWindow(FALSE);
 	}
 
-	if (THEAPP.m_ADJClientService.m_bConnect)
-		SetDlgItemTextA(IDC_BUTTON_ADJConnect, _T("연결 중"));
-	else
-		SetDlgItemTextA(IDC_BUTTON_ADJConnect, _T("연결 해제"));
-
 	// 다발불량 Alarm 이 Off 일 때 관련 Window 모두 Disable 되도록 변경하는 Sequence
 	BOOL bIsMDAlarmOn = THEAPP.Struct_PreferenceStruct.m_bUseMultipleDefectAlarm;
 	for (UINT id : MDGroupBoxIDs)
@@ -496,22 +479,6 @@ BOOL CPreferenceDlg::OnInitDialog()
 	CWnd* pMDUseAreaSimWnd = GetDlgItem(IDC_EDIT_LOT_DEFECT_ALARM_AREA_SIMILARITY_TOLERANCE);
 	if (bIsMDAlarmOn)
 		pMDUseAreaSimWnd->EnableWindow(bUseAreaSim);
-
-	// Auto Param. TCP Server 연결 On / Off 동작
-	if (THEAPP.m_bTCPServerListenerOpened)
-	{
-		m_ctrlEditTCPServerPortNo.SetReadOnly(TRUE);
-		m_ctrlButtonFindfolderRmsdata.EnableWindow(FALSE);
-		m_ctrlEditRmsSaveFolderPath.EnableWindow(FALSE);
-		m_ctrlButtonTCPServerState.SetWindowTextA("서버 연결 끊기");
-	}
-	else
-	{
-		m_ctrlEditTCPServerPortNo.SetReadOnly(FALSE);
-		m_ctrlButtonFindfolderRmsdata.EnableWindow(TRUE);
-		m_ctrlEditRmsSaveFolderPath.EnableWindow(TRUE);
-		m_ctrlButtonTCPServerState.SetWindowTextA("서버 연결");
-	}
 
 	if (m_bCheckChangeEvmsDirectory == FALSE) // Ver2629
 	{
@@ -913,65 +880,6 @@ void CPreferenceDlg::OnBnClickedCheckUseSuakit()
 	}
 }
 
-void CPreferenceDlg::OnBnClickedButtonAdjconnect()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	AfxMessageBox("ADJ IP주소를 변경하시려면 IP주소 변경 후 저장을 먼저 한 뒤 다시 연결을 해주세요.");
-
-	CString log;
-
-	if (!THEAPP.m_ADJClientService.m_bConnect &&
-		THEAPP.Struct_PreferenceStruct.m_bIsUseAIInsp)
-	{
-		THEAPP.m_ADJClientService.ReStart();
-		THEAPP.m_ADJClientService.Initialize();
-
-		if (THEAPP.m_ADJClientService.m_arrClient.TCPConnect())
-		{
-			THEAPP.m_ADJClientService.m_bRealConnect = FALSE; // 3 hand shaking 이 성공했을 때 TRUE로 바뀜
-			THEAPP.m_ADJClientService.ThreeHandShakingRequest();
-
-			log.Format("[ADJ]Connect Success");
-			SetDlgItemTextA(IDC_BUTTON_ADJConnect, _T("연결 중"));
-			THEAPP.m_ADJClientService.m_bConnect = TRUE;
-		}
-		else
-		{
-			log.Format("[ADJ]Connect Failed");
-			SetDlgItemTextA(IDC_BUTTON_ADJConnect, _T("연결 실패"));
-			THEAPP.m_ADJClientService.m_bConnect = FALSE;
-		}
-	}
-	else
-	{
-		if (THEAPP.m_ADJClientService.m_bConnect)
-		{
-			THEAPP.m_ADJClientService.m_arrClient.TCPonClose();
-			THEAPP.m_ADJClientService.m_bConnect = FALSE;
-
-			BOOL bConnect = FALSE;
-
-			if (THEAPP.m_ADJClientService.m_bConnect)
-			{
-				bConnect = TRUE;
-			}
-
-			if (bConnect == FALSE)
-			{
-				// THEAPP.m_ADJClientService.m_arrClient[ iClientNO ].TCPReset(); //20191122 commented
-				THEAPP.m_ADJClientService.ReStart();
-				THEAPP.m_ADJClientService.Initialize();
-			}
-
-			log.Format("[ADJ] Disconnect Success");
-			SetDlgItemTextA(IDC_BUTTON_ADJConnect, _T("연결 해제"));
-		}
-	}
-
-	THEAPP.SaveLog(log);
-	AfxMessageBox(log);
-}
-
 void CPreferenceDlg::OnBnClickedCheckChangeEvmsDirectory() // Ver2629
 {
 	UpdateData(TRUE);
@@ -1006,43 +914,6 @@ void CPreferenceDlg::OnBnClickedButtonFindAdjFile()
 	}
 
 	UpdateData(FALSE);
-}
-
-void CPreferenceDlg::OnBnClickedButtonTcpserverstate()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
-	if (THEAPP.m_bTCPServerListenerOpened)
-	{
-		// 서버 연결중이면 종료 후 업데이트
-		THEAPP.m_TCPServerListener.CloseTCPServer();
-		THEAPP.m_bTCPServerListenerOpened = FALSE;
-
-		// RMS 폴더 바꿀 수 있게업데이트
-		m_ctrlButtonFindfolderRmsdata.EnableWindow(TRUE);
-		m_ctrlEditRmsSaveFolderPath.EnableWindow(TRUE);
-
-		m_ctrlButtonTCPServerState.SetWindowTextA("서버 연결");
-		m_ctrlEditTCPServerPortNo.SetReadOnly(FALSE);
-	}
-	else
-	{
-		// 서버 연결중이 아니면 시작 후 업데이트
-		CString strPortNo;
-		m_ctrlEditTCPServerPortNo.GetWindowText(strPortNo);
-		int iPortNo = _ttoi(strPortNo);
-
-		THEAPP.Struct_PreferenceStruct.m_iTCPServerPortNo = iPortNo;
-		THEAPP.m_TCPServerListener.OpenTCPServer(iPortNo);
-		THEAPP.m_bTCPServerListenerOpened = TRUE;
-
-		// RMS 폴더 못바꾸게업데이트
-		m_ctrlButtonFindfolderRmsdata.EnableWindow(FALSE);
-		m_ctrlEditRmsSaveFolderPath.EnableWindow(FALSE);
-
-		m_ctrlButtonTCPServerState.SetWindowTextA("서버 연결 끊기");
-		m_ctrlEditTCPServerPortNo.SetReadOnly(TRUE);
-	}
 }
 
 void CPreferenceDlg::OnBnClickedButtonFindfolderRmsdata()

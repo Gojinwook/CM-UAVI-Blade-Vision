@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
-// uScan.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
+// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// uScan.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
 //
 #define IDD_ABOUTBOX                    100
 #define IDD_uScan_FORM                  101
@@ -989,7 +989,9 @@
 #define IDC_EDIT_MULTIPLE_FAI_26        2604
 #define IDC_EDIT_OFFSET_FAI_26          2605
 #define IDC_BUTTON_CANCLE               2605
+#define IDC_RADIO_CAMERA_1              2605
 #define IDC_CHECK_USE_NG_FAI_26         2606
+#define IDC_RADIO_CAMERA_2              2606
 #define IDC_CHECK_USE_SPECIAL_NG_FAI_26 2607
 #define IDC_EDIT_SPEC_MIN_FAI_26        2608
 #define IDC_EDIT_SPEC_MAX_FAI_26        2609
@@ -1270,9 +1272,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        527
+#define _APS_NEXT_RESOURCE_VALUE        528
 #define _APS_NEXT_COMMAND_VALUE         32953
-#define _APS_NEXT_CONTROL_VALUE         2605
+#define _APS_NEXT_CONTROL_VALUE         2607
 #define _APS_NEXT_SYMED_VALUE           301
 #endif
 #endif

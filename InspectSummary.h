@@ -82,15 +82,7 @@ public:
 	virtual BOOL OnInitDialog();
 	
 	BOOL m_bHandlerReloadDone;
-
-	CStatic m_LabelADJConnected;
 	
-	// ADJ Disable - 251021, jhkim
-	const UINT ADJConditions[2] ={
-		IDC_STATIC_ADJ,
-		IDC_STATIC_ADJ_CONNECT
-	};
-
 	CStatic m_lbIndexNo;
 	CStatic m_lbPocketNo;
 	CStatic m_lbInspStatus;

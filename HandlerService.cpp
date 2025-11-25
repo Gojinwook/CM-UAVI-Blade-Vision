@@ -401,25 +401,6 @@ void  CHandlerService::Get_TriggerReply()
 	m_bReplyReceived = TRUE;
 }
 
-void  CHandlerService::Get_PositionReply(double dXposition, double dZposition, int iVisionType)
-{
-	if(dXposition && dZposition) 
-	{
-		if (iVisionType==VISION_TYPE_INSPECTION)
-		{
-			THEAPP.m_pTabControlDlg->m_pJogSetDlg->m_nDxHandlerPosX = dXposition;
-			THEAPP.m_pTabControlDlg->m_pJogSetDlg->m_nDxHandlerPosY = dZposition;
-			THEAPP.m_pTabControlDlg->m_pJogSetDlg->UpdateData(FALSE);
-		}
-		else if (iVisionType==VISION_TYPE_BARCODE)
-		{
-			;
-		}
-	}
-	
-	m_bReplyReceived = TRUE;
-}
-
 void  CHandlerService::Get_AMoveReply(int iFlag)
 {
 	if(iFlag==1)
@@ -615,27 +596,6 @@ LRESULT CHandlerService::OnUdpReceive(WPARAM pstrIP, LPARAM pstrRecv)
 			sComOut = sComInit + strCmd + "," + strOp;
 			strLog.Format("[Handler(V<-H)] : %s", sComOut);	THEAPP.SaveLog(strLog);
 			if (strOp == "REPLY") {Get_InspectReply();}
-		}
-		else if (strCmd == "POSITION") {
-			strOp = strtok(NULL, sep);
-			if (strOp == "REPLY")	{
-				CString sTemp1,sTemp2, sTemp3, sTemp4;
-				sTemp1 = strtok(NULL, sep);
-				sTemp2 = strtok(NULL, sep);
-				sTemp3 = strtok(NULL, sep);
-				sTemp4 = strtok(NULL, sep);
-				sComOut = sComInit + strCmd + "," + strOp + "," + sTemp1 + "," + sTemp2+ "," + sTemp3 + "," + sTemp4;
-				strLog.Format("[Handler(V<-H)] : %s", sComOut);	THEAPP.SaveLog(strLog);
-				double dPositionX = atof((LPSTR)(LPCSTR)sTemp1);
-				double dPositionZ = atof((LPSTR)(LPCSTR)sTemp3);
-				int iVisionType = -1;
-				if (sTemp4=="I")
-					iVisionType = VISION_TYPE_INSPECTION;
-				else if (sTemp4=="B")
-					iVisionType = VISION_TYPE_BARCODE;
-				Get_PositionReply(dPositionX,dPositionZ, iVisionType);
-				return 0;
-			}
 		}
 		else if (strCmd == "AMOVE") {
 			strOp = strtok(NULL, sep);

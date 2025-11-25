@@ -45,13 +45,13 @@
     <OutDir>.\Run\</OutDir>
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>_CMI4000_VS_debug_v3046</TargetName>
+    <TargetName>_CM_Blade_VS_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>.\Run\</OutDir>
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>_CMI4000_VS_release_v3046</TargetName>
+    <TargetName>_CM_Blade_VS_release</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -156,7 +156,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="ADJClientService.cpp" />
     <ClCompile Include="AdminPasswordDlg.cpp" />
     <ClCompile Include="AJinAXL.cpp" />
     <ClCompile Include="Algorithm.cpp" />
@@ -182,7 +181,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClCompile Include="EventStub.cpp" />
     <ClCompile Include="FAISettingDlg.cpp" />
     <ClCompile Include="FileBase.cpp" />
-    <ClCompile Include="TCPFileReceiver.cpp" />
     <ClCompile Include="FobModeChangeDlg.cpp" />
     <ClCompile Include="GFunction.cpp" />
     <ClCompile Include="GTRegion.cpp" />
@@ -240,8 +238,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     </ClCompile>
     <ClCompile Include="StrobeData.cpp" />
     <ClCompile Include="TabControlDlg.cpp" />
-    <ClCompile Include="TCPClient.cpp" />
-    <ClCompile Include="TCPServer.cpp" />
     <ClCompile Include="TeachAlgorithmLinefitDlg.cpp" />
     <ClCompile Include="TeachAlgorithmListCtrl.cpp" />
     <ClCompile Include="TeachParamDlg.cpp" />
@@ -297,7 +293,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="ADJClientService.h" />
     <ClInclude Include="AdminPasswordDlg.h" />
     <ClInclude Include="AJinAXL.h" />
     <ClInclude Include="Algorithm.h" />
@@ -325,7 +320,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClInclude Include="EventStub.h" />
     <ClInclude Include="FAISettingDlg.h" />
     <ClInclude Include="FileBase.h" />
-    <ClInclude Include="TCPFileReceiver.h" />
     <ClInclude Include="FobModeChangeDlg.h" />
     <ClInclude Include="GFunction.h" />
     <ClInclude Include="GTRegion.h" />
@@ -381,9 +375,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="StrobeData.h" />
     <ClInclude Include="TabControlDlg.h" />
-    <ClInclude Include="TCPClient.h" />
-    <ClInclude Include="TCPDefine.h" />
-    <ClInclude Include="TCPServer.h" />
     <ClInclude Include="TeachAlgorithmLinefitDlg.h" />
     <ClInclude Include="TeachAlgorithmListCtrl.h" />
     <ClInclude Include="TeachParamDlg.h" />

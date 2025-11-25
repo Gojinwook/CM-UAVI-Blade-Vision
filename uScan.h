@@ -52,10 +52,6 @@
 
 #include "SaveManager.h"	//LeeGW
 
-#include "ADJClientService.h"
-
-#include "TCPServer.h" // Auto Parameter update - 250910, jhkim
-
 
 // CuScanApp:
 // See uScan.cpp for the implementation of this class
@@ -152,6 +148,7 @@ public:
 	CString GetPCID() { return m_szPCID; }
 
 	void	SaveLog ( CString logMsg );
+	void	DoubleLogOut(const char *format, ...);
 	void	SaveDetectLog (CString logMsg);
 	void	SaveLotSummaryLog(BOOL bSaveLas, CString sStartTime, CString sEndTime, CString sLotID, double dInspectTime,
 							int iTotalInsp, int iTotalOK, double dOKRatio, int iTotalNG, double dNGRatio,
@@ -172,9 +169,6 @@ public:
 	// void SaveADJLotResultLog(CString sPath, CString strResult, CString strAdditionalTitle, BOOL bUseAdditionalLog, int iPCType, int iPcVisionNo, int iMzNo);
 	void SaveADJDaySummaryINI(CString sSectionModel, BOOL bResultNG, BOOL bResultSkip);	// LeeGW
 	void SaveOnlyADJLotResultLog(BOOL bSaveLas, CString sLotID, int iTrayNo, CString sBarcode, int iModuleNo, CString sDeepModelName, CString sVisionResult, CString sADJResult, CString sAddStr);	//LeeGW
-	// MEMO : What is difference between two functions below? - 250905, jhkim
-	void SaveRmsData(CString strFilePath, CString strModelName, CString strSection, CString strData); //RMS
-	void SaveRmsData(CString strFilePath, CString strModelName, map<CString, CString> strData);
 	void SavePCStatusLog(BOOL bSaveLas);
 
 	int	 m_nADJResult[DEEP_MODEL_NUM][MAX_MODULE_NUM];	//ADJ Result
@@ -385,11 +379,6 @@ public:
 		int m_iHandlerRetryWaitTime;
 		int m_iHandlerReplyWaitTime;
 
-		// Auto Parameter update - 250910, jhkim
-		// TCP Listner Socket Port
-		int	m_iTCPServerPortNo;
-		CString	m_strTCPServerIPAddr;
-
 	}PreferenceStruct;
 	PreferenceStruct Struct_PreferenceStruct;
 
@@ -440,10 +429,7 @@ public:
 	void AddLasZip(CString strLotID, CString sFilePath, CString sLasFileName);
 	void CloseLasZip(CString sBarcode);
 	void MoveLasZip(CString strLotID, CString sBarcode);
-	// LeeGW//////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////// Deep Learning
-	
-	CADJClientService		m_ADJClientService;
+
 	//쓰레드 단위로 초기화 된 MFC함수의 Send가 엇갈리는 것을 막기 위한 cs
 	CRITICAL_SECTION		m_csSendADJ;									
 	CRITICAL_SECTION		m_csADJResultLog;
@@ -451,11 +437,6 @@ public:
 	//////////////////////////////////////////////////////////////////////
 
 	CRITICAL_SECTION		m_csMULTIPLEDEFECTLOG; //Multiple Defect
-
-	// TCP Socket 
-	// Auto Parameter update - 250910, jhkim
-	CTCPServer m_TCPServerListener;
-	BOOL m_bTCPServerListenerOpened;
 
 	//////////////////////////////////////////////////////////////////////파일 폴더 클래스 선언부
 	CFileBase m_FileBase;

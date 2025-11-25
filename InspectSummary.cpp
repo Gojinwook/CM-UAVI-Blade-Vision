@@ -89,7 +89,6 @@ void CInspectSummary::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_STAGE_NO, m_iDxLineNo);
 	DDX_Control(pDX, IDC_PROGRESS_DISK_HDDC, m_ctrlProgressHddC);
 	DDX_Control(pDX, IDC_PROGRESS_DISK_HDDD, m_ctrlProgressHddD);
-	DDX_Control(pDX, IDC_STATIC_ADJ_CONNECT, m_LabelADJConnected);
 	DDX_Control(pDX, IDC_STATIC_INDEX_NO, m_lbIndexNo);
 	DDX_Control(pDX, IDC_STATIC_POCKET_NO, m_lbPocketNo);
 	DDX_Control(pDX, IDC_STATIC_INSPECT_STATUS, m_lbInspStatus);
@@ -1205,40 +1204,6 @@ void CInspectSummary::OnTimer(UINT_PTR nIDEvent)
 	{
 		case 0:
 		{
-			KillTimer(0);
-
-			if (THEAPP.Struct_PreferenceStruct.m_bIsUseAIInsp)
-			{
-				if (THEAPP.m_ADJClientService.m_bConnect)
-				{
-					m_LabelADJConnected.SetWindowText("Connected");
-				}
-				else
-				{
-					m_LabelADJConnected.SetWindowText("Not Connected");
-
-					THEAPP.m_ADJClientService.ReStart();
-					THEAPP.m_ADJClientService.Initialize();
-
-					if (THEAPP.m_ADJClientService.m_arrClient.TCPConnect())
-					{
-						THEAPP.m_ADJClientService.m_bConnect = TRUE;
-					}
-					else
-					{
-						THEAPP.m_ADJClientService.m_bConnect = FALSE;
-					}
-				}
-			}
-			else
-			{
-				m_LabelADJConnected.SetWindowText("Not Use");
-			}
-
-
-			// 1분 주기로 ADJ 연결 체크
-			SetTimer(0, ADJ_CONNECT_CHECK_TIME, NULL);
-
 			break;
 		}
 		case 1:
@@ -1388,17 +1353,6 @@ BOOL CInspectSummary::OnInitDialog()
 		SetTimer(2, PCSTATUS_CHECK_TIME, NULL);
 
 	dProcessStartTime = GetTickCount();
-
-	// ADJ Disable - 251021, jhkim
-	for (UINT id : ADJConditions)
-	{
-		CWnd* pWnd = GetDlgItem(id);
-		if (pWnd)
-		{
-			pWnd->EnableWindow(FALSE);
-			pWnd->ShowWindow(SW_HIDE);
-		}
-	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
