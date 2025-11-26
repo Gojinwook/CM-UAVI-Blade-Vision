@@ -594,6 +594,7 @@ enum {
 // MEMO : Auto Param. 1면 검사티칭 탭(MAX_TEACHING_TAB)  - 250912, jhkim
 #define MAX_TEACHING_TAB			6
 #define MAX_ROI_TEACHING_TAB		5	
+#define MAX_BARCODE_GRAB			5
 
 
 // 검사이미지
@@ -670,6 +671,11 @@ enum {
 	LIGHT_CHANNEL_5,
 	MAX_LIGHT_CHANNEL
 };
+
+// PC별 그랩보드 인덱스
+#define PC_VISION_GRABBER_1			0
+#define PC_VISION_GRABBER_2			1
+#define PC_VISION_GRABBER_NUMBER	2
 
 #define MAX_LIGHT_PAGE	2
 #define LIGHT_PAGE_NO_USE	-1

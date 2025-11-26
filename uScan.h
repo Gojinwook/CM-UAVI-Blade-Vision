@@ -226,6 +226,10 @@ public:
 	CInspectViewOverayImageDlg* m_pInspectViewOverayImageDlg;
 	CTabControlDlg* m_pTabControlDlg;
 
+	// Camera
+	MIL_ID m_MilApplication;
+	MIL_ID m_MilSystem[PC_VISION_GRABBER_NUMBER];
+
 	//////////////////////////////////////////////////////////////////////다이알로그 클래스 선언부
 
 	typedef struct _stPreferenceStruct

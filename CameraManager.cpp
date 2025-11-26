@@ -14,16 +14,6 @@ CCameraManager* CCameraManager::GetInstance(BOOL bShowFlag)
 
 void CCameraManager::DeleteInstance()
 {
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	m_PointGrayCam.EndGrab();
-	m_PointGrayCam.UnInitialize();
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-	m_CrevisCam.EndGrab();
-	m_CrevisCam.UnInitialize();
-#endif
-
 	for (int i=0; i<MAX_IMAGE_TAB; i++)
 	{
 		m_hoCallBackImage[i].Reset();
@@ -32,19 +22,38 @@ void CCameraManager::DeleteInstance()
 	}
 
 	MdigFree(MilDigitizer);
-
 	MsysFree(MilSystem);
-	MappFree(MilApplication);
 	m_bGrabDone = TRUE;
-	SAFE_DELETE(m_pInstance);
 
+	for (int i = 0; i < MAX_BARCODE_GRAB; i++)
+	{
+		m_hoCallBackImage_BC1[i].Reset();
+		gen_empty_obj(&(m_hoCallBackImage_BC1[i]));
+		MbufFree(MilImageBuf_BC1[i]);
+	}
+	MdigFree(MilDigitizer_BC1);
+	m_bGrabDone_BC1 = TRUE;
+
+	for (int i = 0; i < MAX_BARCODE_GRAB; i++)
+	{
+		m_hoCallBackImage_BC2[i].Reset();
+		gen_empty_obj(&(m_hoCallBackImage_BC2[i]));
+		MbufFree(MilImageBuf_BC2[i]);
+	}
+	MdigFree(MilDigitizer_BC2);
+	m_bGrabDone_BC2 = TRUE;
+
+	MsysFree(MilSystem_BC);
+
+	MappFree(MilApplication);
+
+	SAFE_DELETE(m_pInstance);
 }
 
 CCameraManager::CCameraManager(void)
 {
 	ImageGrabCount =0;
 	m_bReGrab = FALSE;
-
 	m_bGrabDone = TRUE;
 
 	//0524
@@ -75,6 +84,24 @@ CCameraManager::CCameraManager(void)
 		m_lCamImageHeight = 1600;
 		break;
 	}
+
+	for (int i = 0; i < MAX_BARCODE_GRAB; i++)
+	{
+		m_hoCallBackImage_BC1[i].Reset();
+		gen_empty_obj(&(m_hoCallBackImage_BC1[i]));
+	}
+	m_bGrabDone_BC1 = TRUE;
+
+	for (int i = 0; i < MAX_BARCODE_GRAB; i++)
+	{
+		m_hoCallBackImage_BC2[i].Reset();
+		gen_empty_obj(&(m_hoCallBackImage_BC2[i]));
+	}
+	m_bGrabDone_BC2 = TRUE;
+	
+	m_lBarcodeCamImageWidth = 2048;
+	m_lBarcodeCamImageHeight = 1088;
+
 }
 
 
@@ -168,6 +195,30 @@ MIL_INT MPTYPE GrabEnd(MIL_INT HookType, MIL_ID HookId, void MPTYPE *UserDataPtr
 	}
 }
 
+MIL_INT MPTYPE GrabEnd_BC1(MIL_INT HookType, MIL_ID HookId, void MPTYPE *UserDataPtr)
+{
+	/* Retrieve the MIL_ID of the grabbed buffer. */
+	CCameraManager *pCameraManager = (CCameraManager *)UserDataPtr;
+
+	THEAPP.SaveLog("Barcode1 GrabEnd");
+
+	pCameraManager->m_bGrabDone_BC1 = TRUE;
+
+	return 0;
+}
+
+MIL_INT MPTYPE GrabEnd_BC2(MIL_INT HookType, MIL_ID HookId, void MPTYPE *UserDataPtr)
+{
+	/* Retrieve the MIL_ID of the grabbed buffer. */
+	CCameraManager *pCameraManager = (CCameraManager *)UserDataPtr;
+
+	THEAPP.SaveLog("Barcode2 GrabEnd");
+
+	pCameraManager->m_bGrabDone_BC2 = TRUE;
+
+	return 0;
+}
+
 bool CCameraManager::InitGrabInterface()
 {
 	MIL_INT SizeX = 0; 
@@ -175,22 +226,10 @@ bool CCameraManager::InitGrabInterface()
 
 	MappAlloc(M_DEFAULT, &MilApplication);
 
-#ifdef GRABBER_RADIENT_USE
-	MsysAlloc(M_SYSTEM_RADIENTEVCL, M_DEV0, M_DEFAULT, &MilSystem);
-	THEAPP.SaveLog("Radient Grabber Init");
-#endif
-
-#ifdef GRABBER_SOLIOS_USE
-	MsysAlloc(M_SYSTEM_SOLIOS, M_DEV0, M_DEFAULT, &MilSystem);
-	THEAPP.SaveLog("Solios Grabber Init");
-#endif
-
-#ifdef GRABBER_RAPIXOCXP_USE
 	MsysAlloc(M_DEFAULT, M_SYSTEM_RAPIXOCXP, M_DEV0, M_DEFAULT, &MilSystem);
 	THEAPP.SaveLog("RapixoCXP Grabber Init");
-#endif
 
-	MdigAlloc(MilSystem, M_DEV0, THEAPP.GetWorkingDirectory()+"\\Data\\"+"trigger.dcf", M_DEFAULT, &MilDigitizer);
+	MdigAlloc(MilSystem, M_DEV0, THEAPP.GetWorkingDirectory()+"\\Data\\"+"Inspect.dcf", M_DEFAULT, &MilDigitizer);
 	
 	MdigInquire(MilDigitizer, M_SOURCE_SIZE_X, &SizeX);
 	MdigInquire(MilDigitizer, M_SOURCE_SIZE_Y, &SizeY);
@@ -218,10 +257,7 @@ bool CCameraManager::InitGrabInterface()
 	}
 	
 	MdigControl(MilDigitizer, M_GRAB_TIMEOUT, M_INFINITE);
-
-#ifndef GRABBER_RAPIXOCXP_USE
 	MdigControl(MilDigitizer, M_CAMERALINK_CC1_SOURCE, M_GRAB_EXPOSURE+M_TIMER1);
-#endif
 	
 	MdigControl(MilDigitizer, M_GRAB_MODE, M_ASYNCHRONOUS);
 	MdigControl(MilDigitizer, M_GRAB_TRIGGER_MODE, M_DEFAULT);
@@ -229,13 +265,165 @@ bool CCameraManager::InitGrabInterface()
 	MdigHookFunction(MilDigitizer, M_GRAB_START, GrabStart, this);
 	MdigHookFunction(MilDigitizer, M_GRAB_END, GrabEnd, this);
 
+	// Barcode
+	MsysAlloc(M_SYSTEM_RADIENTEVCL, M_DEV0, M_DEFAULT, &MilSystem_BC);
+	THEAPP.SaveLog("Radient EVCL Init");
+
+	MdigAlloc(MilSystem_BC, M_DEV0, THEAPP.GetWorkingDirectory() + "\\Data\\" + "Barcode1.dcf", M_DEFAULT, &MilDigitizer_BC1);
+	MdigAlloc(MilSystem_BC, M_DEV1, THEAPP.GetWorkingDirectory() + "\\Data\\" + "Barcode2.dcf", M_DEFAULT, &MilDigitizer_BC2);
+
+	MdigInquire(MilDigitizer_BC1, M_SOURCE_SIZE_X, &SizeX);
+	MdigInquire(MilDigitizer_BC1, M_SOURCE_SIZE_Y, &SizeY);
+
+	m_lBarcodeCamImageWidth = SizeX;
+	m_lBarcodeCamImageHeight = SizeY;
+
+	for (i = 0; i < MAX_BARCODE_GRAB; i++)
+	{
+		MbufAlloc2d(MilSystem_BC, SizeX, SizeY, 8L + M_UNSIGNED, M_IMAGE + M_DISP + M_GRAB, &(MilImageBuf_BC1[i]));
+		MbufClear(MilImageBuf_BC1[i], 0);
+
+		MbufInquire(MilImageBuf_BC1[i], M_HOST_ADDRESS, &addr);
+		gen_image1_extern(&(m_hoCallBackImage_BC1[i]), "byte", m_lBarcodeCamImageWidth, m_lBarcodeCamImageHeight, (Hlong)addr, NULL);
+
+		MbufAlloc2d(MilSystem_BC, SizeX, SizeY, 8L + M_UNSIGNED, M_IMAGE + M_DISP + M_GRAB, &(MilImageBuf_BC2[i]));
+		MbufClear(MilImageBuf_BC2[i], 0);
+
+		MbufInquire(MilImageBuf_BC2[i], M_HOST_ADDRESS, &addr);
+		gen_image1_extern(&(m_hoCallBackImage_BC2[i]), "byte", m_lBarcodeCamImageWidth, m_lBarcodeCamImageHeight, (Hlong)addr, NULL);
+	}
+
+	MdigControl(MilDigitizer_BC1, M_GRAB_TIMEOUT, M_INFINITE);
+	MdigControl(MilDigitizer_BC1, M_GRAB_MODE, M_ASYNCHRONOUS);
+	MdigControl(MilDigitizer_BC1, M_GRAB_TRIGGER_MODE, M_DEFAULT);
+	MdigHookFunction(MilDigitizer_BC1, M_GRAB_END, GrabEnd_BC1, this);
+
+	MdigControl(MilDigitizer_BC2, M_GRAB_TIMEOUT, M_INFINITE);
+	MdigControl(MilDigitizer_BC2, M_GRAB_MODE, M_ASYNCHRONOUS);
+	MdigControl(MilDigitizer_BC2, M_GRAB_TRIGGER_MODE, M_DEFAULT);
+	MdigHookFunction(MilDigitizer_BC2, M_GRAB_END, GrabEnd_BC2, this);
+	   
 	return true;
 }
 
-void CCameraManager::CameraLive()
+BOOL CCameraManager::GrabBarcode(int iCamIdx, int iGrabIdx)
 {
+	DWORD dwGrabStart = 0, dwGrabEnd = 0;
 
+	if (iCamIdx == 0)
+	{
+		m_bGrabDone_BC1 = FALSE;
+		MdigGrab(MilDigitizer_BC1, MilImageBuf_BC1[iGrabIdx]);
 
+		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 5);
+
+		Sleep(20);
+
+		dwGrabStart = GetTickCount();
+		while (1)
+		{
+			if (m_bGrabDone_BC1)
+				break;
+
+			dwGrabEnd = GetTickCount();
+
+			if ((dwGrabEnd - dwGrabStart) > 50)
+			{
+				MdigControl(MilDigitizer_BC1, M_GRAB_ABORT, M_DEFAULT);
+				return FALSE;
+			}
+
+			Sleep(1);
+		}
+	}
+	else if (iCamIdx == 1)
+	{
+		m_bGrabDone_BC2 = FALSE;
+		MdigGrab(MilDigitizer_BC2, MilImageBuf_BC2[iGrabIdx]);
+
+		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 5);
+
+		Sleep(20);
+
+		dwGrabStart = GetTickCount();
+		while (1)
+		{
+			if (m_bGrabDone_BC2)
+				break;
+
+			dwGrabEnd = GetTickCount();
+
+			if ((dwGrabEnd - dwGrabStart) > 50)
+			{
+				MdigControl(MilDigitizer_BC2, M_GRAB_ABORT, M_DEFAULT);
+				return FALSE;
+			}
+
+			Sleep(1);
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL CCameraManager::GrabBarcodeImage(int iCamIdx, Hobject *pHBarcodeImage)
+{
+	DWORD dwGrabStart = 0, dwGrabEnd = 0;
+
+	if (iCamIdx == 0)
+	{
+		m_bGrabDone_BC1 = FALSE;
+		MdigGrab(MilDigitizer_BC1, MilImageBuf_BC1[0]);
+
+		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 5);
+
+		Sleep(20);
+
+		dwGrabStart = GetTickCount();
+		while (1)
+		{
+			if (m_bGrabDone_BC1)
+				break;
+
+			dwGrabEnd = GetTickCount();
+
+			if ((dwGrabEnd - dwGrabStart) > 50)
+			{
+				MdigControl(MilDigitizer_BC1, M_GRAB_ABORT, M_DEFAULT);
+				return FALSE;
+			}
+
+			Sleep(1);
+		}
+	}
+	else if (iCamIdx == 1)
+	{
+		m_bGrabDone_BC2 = FALSE;
+		MdigGrab(MilDigitizer_BC2, MilImageBuf_BC2[0]);
+
+		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 5);
+
+		Sleep(20);
+
+		dwGrabStart = GetTickCount();
+		while (1)
+		{
+			if (m_bGrabDone_BC2)
+				break;
+
+			dwGrabEnd = GetTickCount();
+
+			if ((dwGrabEnd - dwGrabStart) > 50)
+			{
+				MdigControl(MilDigitizer_BC2, M_GRAB_ABORT, M_DEFAULT);
+				return FALSE;
+			}
+
+			Sleep(1);
+		}
+	}
+
+	return TRUE;
 }
 
 void CCameraManager::CallHookFunction(int iGrabBufIdx)
@@ -425,61 +613,6 @@ void CCameraManager::InspectOriImageGrabSave(int ImageCount, int nModuleNo, Hobj
 		THEAPP.SaveLog(str);
 	}
 
-}
-
-
-BOOL CCameraManager::InitPointGray()
-{
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	SetCamSerialNumber(THEAPP.Struct_PreferenceStruct.m_iBarcodeCamSerial);
-	m_PointGrayCam.Initialize();
-	m_PointGrayCam.StartGrab();
-#endif
-
-	return TRUE;
-}
-
-BOOL CCameraManager::InitCrevisCam()
-{
-#ifdef BARCODE_CAM_CREVIS_USE
-	m_CrevisCam.Initialize();
-	m_CrevisCam.StartGrab();
-#endif
-
-	return TRUE;
-}
-
-void CCameraManager::GrabBarcodeImage(Hobject* pHImage)
-{
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	m_PointGrayCam.mbGogingRefresh = FALSE;
-
-	if (THEAPP.m_iMachineInspType == MACHINE_WELDING)
-		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 5);
-	else
-		THEAPP.m_pTriggerManager->FireTrigger(VISION_TYPE_BARCODE, 0);
-
-	m_PointGrayCam.GetGrabImage(pHImage);
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-	m_CrevisCam.mbGogingRefresh = FALSE;
-
-	THEAPP.m_pHandlerService->Set_BarcodeTriggerRequest();
-
-	m_CrevisCam.GetGrabImage(pHImage);
-#endif
-}
-
-BOOL CCameraManager::ResetBarcodeCamera()
-{
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	return m_PointGrayCam.ResetCamera();
-#elif defined BARCODE_CAM_CREVIS_USE
-	return m_CrevisCam.ResetCamera();
-#else
-	return TRUE;
-#endif
 }
 
 BOOL CCameraManager::GrabErrorCheck(int igc)

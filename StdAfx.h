@@ -37,18 +37,6 @@
 
 //////////////////////////////////////////////////////////////
 
-#define BARCODE_CAM_CALLBACK_USE
-
-#ifdef BARCODE_CAM_POINTGRAY_USE
-#include "FlyCapture2.h"
-using namespace FlyCapture2;
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-#include "VirtualFG40.h"
-#pragma comment (lib, "VirtualFG40.lib")
-#endif
-
 #include "Define.h"
 
 #include "Delegate.h"

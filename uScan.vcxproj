@@ -173,7 +173,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClCompile Include="ConditionInnerBarrelDlg.cpp" />
     <ClCompile Include="ConditionLensDlg.cpp" />
     <ClCompile Include="ConditionTopBarrelDlg.cpp" />
-    <ClCompile Include="CrevisCam.cpp" />
     <ClCompile Include="DefectListDlg.cpp" />
     <ClCompile Include="DefectPriorityDlg.cpp" />
     <ClCompile Include="Delegate.cpp" />
@@ -225,7 +224,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClCompile Include="ModelDataManager.cpp" />
     <ClCompile Include="NewModelDlg.cpp" />
     <ClCompile Include="Operator_RegisterDlg.cpp" />
-    <ClCompile Include="PointGrayCam.cpp" />
     <ClCompile Include="PreferenceDlg.cpp" />
     <ClCompile Include="ResultViewSelectDlg.cpp" />
     <ClCompile Include="SaveManager.cpp" />
@@ -311,7 +309,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClInclude Include="ConditionLensDlg.h" />
     <ClInclude Include="ConditionTopBarrelDlg.h" />
     <ClInclude Include="ConfigBuildVersion.h" />
-    <ClInclude Include="CrevisCam.h" />
     <ClInclude Include="DefectListDlg.h" />
     <ClInclude Include="DefectPriorityDlg.h" />
     <ClInclude Include="Define.h" />
@@ -365,7 +362,6 @@ copy "$(SolutionDir)Release.txt" "$(SolutionDir)deploy\"</Command>
     <ClInclude Include="ModelDataManager.h" />
     <ClInclude Include="NewModelDlg.h" />
     <ClInclude Include="Operator_RegisterDlg.h" />
-    <ClInclude Include="PointGrayCam.h" />
     <ClInclude Include="PreferenceDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResultViewSelectDlg.h" />

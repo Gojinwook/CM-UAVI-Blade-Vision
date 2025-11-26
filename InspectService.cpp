@@ -355,7 +355,7 @@ UINT BarcodeScanThread(LPVOID lp)
 			for (K = 0; K < 6; K++) // 6번 Retry
 			{
 				HBarcodeGrabImage.Reset();
-				THEAPP.m_pCameraManager->GrabBarcodeImage(&HBarcodeGrabImage);
+				THEAPP.m_pCameraManager->GrabBarcodeImage(0, &HBarcodeGrabImage);
 				if (THEAPP.m_pGFunction->ValidHImage(HBarcodeGrabImage) == TRUE)
 				{
 					sDelay.Format("###바코드### 모션 %d 번째 / %d 번째 시도 성공", nInspCnt + 1, K + 1);
@@ -367,7 +367,7 @@ UINT BarcodeScanThread(LPVOID lp)
 
 			if (bGrabSuccess == FALSE && bResetCameraDone == FALSE)
 			{
-				bResetCameraRet = THEAPP.m_pCameraManager->ResetBarcodeCamera();
+				//bResetCameraRet = THEAPP.m_pCameraManager->ResetBarcodeCamera();
 				if (bResetCameraRet)
 				{
 					THEAPP.SaveLog("바코드 카메라 초기화 성공");
@@ -379,7 +379,7 @@ UINT BarcodeScanThread(LPVOID lp)
 					for (K = 0; K < 6; K++) // 6번 Retry
 					{
 						HBarcodeGrabImage.Reset();
-						THEAPP.m_pCameraManager->GrabBarcodeImage(&HBarcodeGrabImage);
+						THEAPP.m_pCameraManager->GrabBarcodeImage(0, &HBarcodeGrabImage);
 						if (THEAPP.m_pGFunction->ValidHImage(HBarcodeGrabImage) == TRUE)
 						{
 							sDelay.Format("###바코드### 모션 %d 번째 / %d 번째 시도 성공", nInspCnt + 1, K + 1);

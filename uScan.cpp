@@ -354,17 +354,6 @@ BOOL CuScanApp::InitInstance()
 	m_pAutoCalService = CAutoCalService::GetInstance();
 
 #ifdef INLINE_MODE
-
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	m_pCameraManager->InitPointGray();
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-	m_pCameraManager->InitCrevisCam();
-#endif
-
-	SaveLog("Barcode Cam Init Complete");
-
 	// 0524
 	m_pCameraManager->m_bUseGrabErrFIltering = Struct_PreferenceStruct.m_bUseGrabErrFIltering;
 	m_pCameraManager->m_iGrabErrDarkAreaGVLimit = Struct_PreferenceStruct.m_iGrabErrDarkAreaGVLimit;

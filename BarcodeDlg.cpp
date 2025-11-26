@@ -392,8 +392,7 @@ void CBarcodeDlg::OnTimer(UINT_PTR nIDEvent)
 		{
 			if (m_bOnOff == TRUE)
 			{
-				// To Do: m_iRadioDispCamera
-				THEAPP.m_pCameraManager->GrabBarcodeImage(&m_HImage);
+				THEAPP.m_pCameraManager->GrabBarcodeImage(m_iRadioDispCamera, &m_HImage);
 				InvalidateRect(m_ViewRect, FALSE);
 				m_bOnOff = FALSE;
 			}
@@ -486,8 +485,7 @@ void CBarcodeDlg::OnBnClickedGrab()
 			Sleep(500);
 		}
 
-		// To Do: m_iRadioDispCamera
-		THEAPP.m_pCameraManager->GrabBarcodeImage(&m_HImage);
+		THEAPP.m_pCameraManager->GrabBarcodeImage(m_iRadioDispCamera, &m_HImage);
 		InvalidateRect(m_ViewRect, FALSE);
 
 		CString FolderName;

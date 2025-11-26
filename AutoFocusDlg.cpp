@@ -291,32 +291,13 @@ void CAutoFocusDlg::OnBnClickedButtonAmove()
 
 void CAutoFocusDlg::OnBnClickedButtonJmovePlus()
 {
-	UpdateData(TRUE);
-	UpdateData(FALSE);
 
-#ifdef INLINE_MODE
-	
-	UpdateData(TRUE);
-	m_dCurZPosition = THEAPP.m_pTabControlDlg->m_pJogSetDlg->m_nDxHandlerPosY + m_dEditJMovePosition;
-
-	AfxBeginThread(AMoveRequest_Thread, this);
-#endif
 }
 
 
 void CAutoFocusDlg::OnBnClickedButtonJmoveMinus()
 {
-	UpdateData(TRUE);
-	UpdateData(FALSE);
 
-#ifdef INLINE_MODE
-	UpdateData(TRUE);
-
-	m_dCurZPosition = THEAPP.m_pTabControlDlg->m_pJogSetDlg->m_nDxHandlerPosY - m_dEditJMovePosition;
-
-	AfxBeginThread(AMoveRequest_Thread, this);
-
-#endif
 }
 
 void CAutoFocusDlg::OnBnClickedButtonRoiAf()

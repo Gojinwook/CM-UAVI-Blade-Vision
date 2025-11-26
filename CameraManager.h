@@ -1,13 +1,5 @@
 #pragma once
 
-#ifdef BARCODE_CAM_POINTGRAY_USE
-#include "PointGrayCam.h"
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-#include "CrevisCam.h"
-#endif
-
 class CCameraManager
 {
 public:
@@ -32,8 +24,10 @@ public:
 	BOOL m_bGrabDone;
 	BOOL m_bReGrab;
 
+	long GetCamImageWidth() { return m_lCamImageWidth; }
+	long GetCamImageHeight() { return m_lCamImageHeight; }
+
 	bool InitGrabInterface();
-	void CameraLive();
 	void TeachingImageGrabSave();
 	BOOL CopyRawImageQueue(int ImageCount, int nModuleNo, Hobject *pHImage, CString sBarcodeName);
 	void InspectOriImageGrabSave(int ImageCount, int nModuleNo, Hobject HImage, CString sBarcodeName);
@@ -41,35 +35,36 @@ public:
 	void GrabErrorPostProcess();
 	BOOL GrabErrorCheck(int igc);	// 24.08.09 - v2658 - 잘린 영상 필터링 추가 - LeeGW
 
-	// Barcode Camera
-	BOOL InitPointGray();
-	BOOL InitCrevisCam();
-	unsigned int GetCamSerialNumber()								{ return m_uiCamSerialNumber; }
-	void SetCamSerialNumber( unsigned int uiCameraSerialNumber )	{  m_uiCamSerialNumber = uiCameraSerialNumber; }
-	void GrabBarcodeImage(Hobject *pHImage);
-	BOOL ResetBarcodeCamera();
-
 	//0524
 	BOOL m_bUseGrabErrFIltering;
 	int m_iGrabErrDarkAreaGVLimit;
 	int m_iGrabErrBrightAreaGVLimit;
 
-	long GetCamImageWidth() { return m_lCamImageWidth; }
-	long GetCamImageHeight() { return m_lCamImageHeight; }
+	// Barcode Camera
+	MIL_ID MilSystem_BC;
+	MIL_ID MilDigitizer_BC1;
+	MIL_ID MilImageBuf_BC1[MAX_BARCODE_GRAB];
+	Hobject m_hoCallBackImage_BC1[MAX_BARCODE_GRAB];
+	BOOL m_bGrabDone_BC1;
 
+	MIL_ID MilDigitizer_BC2;
+	MIL_ID MilImageBuf_BC2[MAX_BARCODE_GRAB];
+	Hobject m_hoCallBackImage_BC2[MAX_BARCODE_GRAB];
+	BOOL m_bGrabDone_BC2;
+
+	long GetBarcodeCamImageWidth() { return m_lBarcodeCamImageWidth; }
+	long GetBarcodeCamImageHeight() { return m_lBarcodeCamImageHeight; }
+
+	BOOL GrabBarcode(int iCamIdx, int iGrabIdx);
+	BOOL GrabBarcodeImage(int iCamIdx, Hobject *pHBarcodeImage);
+	
 protected:
 	unsigned int m_uiCamSerialNumber;
-
-#ifdef BARCODE_CAM_POINTGRAY_USE
-	CPointGrayCam m_PointGrayCam;
-#endif
-
-#ifdef BARCODE_CAM_CREVIS_USE
-	CCrevisCam m_CrevisCam;
-#endif
 
 	long m_lCamImageWidth;
 	long m_lCamImageHeight;
 
+	long m_lBarcodeCamImageWidth;
+	long m_lBarcodeCamImageHeight;
 };
 
